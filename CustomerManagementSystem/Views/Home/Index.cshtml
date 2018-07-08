@@ -1,31 +1,39 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "首頁";
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>MVC開發實戰 Week1 Homework</h1>
 </div>
-
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
+    <div class="col-lg-12">
         <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            @Html.ActionLink("客戶資料管理", "Index", "Customers",new { @class= "btn btn-primary" })
         </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>作業說明</h2>
+        <p>* 請使用 "客戶資料" 這個資料庫做開發 (如附件檔案)</p>
+        <p>* 請實作出「客戶資料管理」、「客戶聯絡人管理」與「客戶銀行帳戶管理」等簡易 CRUD 功能 (盡量做各種功能出來)</p>
+        <p>* 在列表頁要實作「搜尋」功能</p>
+        <p>* 實作一個清單頁面，顯示欄位有「客戶名稱、聯絡人數量、銀行帳戶數量」共三個欄位</p>
+        <p>* 主選單要有連結可以直接連到三個主要功能的列表頁。</p>
+        <p>* 對於 Create 與 Edit 表單要套用欄位驗證 (必填、Email格式、欄位長度限制等驗證)</p>
+        <p>* 刪除資料功能不能真的刪除資料庫中的資料，必須修改資料庫，加上一個「是否已刪除」欄位，資料庫中的該欄位為 bit 類型，0 代表未刪除，1 代表已刪除，且列表頁不得顯示已刪除的資料。</p>
+        <p>* 實作「客戶聯絡人」時，同一個客戶下的聯絡人，其 Email 不能重複。</p>
+        <p>* 實作一個「自訂輸入驗證屬性」可驗證「手機」的電話格式必須為 "\d{4}-\d{6}" 的格式 ( e.g. 0911-111111 )</p>
+        <p>* 使用 Repository Pattern 管理所有新刪查改(CRUD)等功能</p>
+        <p>* 修改所有的「刪除」邏輯，所有資料都不能真正被刪除，資料庫中也要新增「是否已刪除」欄位 (欄位要設定 bit 型態)</p>
+        <p>* 修改「客戶資料」表格，新增「客戶分類」欄位，可設定特定選項的分類</p>
+        <p>* 在「客戶資料列表」頁面新增篩選功能，可以用「客戶分類」欄位進行資料篩選 (下拉選單)</p>
+        <p>* 資料篩選的邏輯要寫在 Repository 的類別裡面</p>
+        <p>* 在「客戶聯絡人列表」頁面新增篩選功能，可以用「職稱」欄位進行資料篩選</p>
+        <p>* 修改「客戶資料列表」與「客戶聯絡人列表」頁面，設定讓每個欄位都能進行排序 (可升冪、可降冪排序)</p>
+        <p>* 如果可以的話，透過 JavaScript 實作一些 AJAX 操作，後端 MVC 使用 JsonResult 進行回應</p>
+        <p>
+            * 使用 ClosedXML 這個 NuGet 套件實作資料匯出功能，每個清單頁上都要有可以匯出 Excel 檔案的功能，要用到 FileResult 下載檔案
+        </p>
     </div>
 </div>
