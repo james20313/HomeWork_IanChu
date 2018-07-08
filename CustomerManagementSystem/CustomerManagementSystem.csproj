@@ -177,6 +177,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Attribute\TaiwanCompanyNumberAttribute.cs" />
     <Compile Include="Models\EFGeneratePartialClass.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
