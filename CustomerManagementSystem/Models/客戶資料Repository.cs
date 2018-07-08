@@ -10,6 +10,16 @@ namespace CustomerManagementSystem.Models
         {
             return this.All().FirstOrDefault(x => x.Id==id);
         }
+
+        public override IQueryable<客戶資料> All()
+        {
+            return base.All().Where(x => x.IsDeleted == false);
+        }
+
+        public override void Delete(客戶資料 entity)
+        {
+            entity.IsDeleted = true;
+        }
     }
 
 	public  interface I客戶資料Repository : IRepository<客戶資料>
