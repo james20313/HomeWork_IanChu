@@ -7,8 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
-using CustomerManagementSystem.ViewModels.In;
-using CustomerManagementSystem.ViewModels.Out;
+using CustomerManagementSystem.ViewModels;
 
 
 namespace CustomerManagementSystem.Controllers

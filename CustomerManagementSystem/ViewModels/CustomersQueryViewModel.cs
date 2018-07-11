@@ -1,11 +1,10 @@
 ﻿using CustomerManagementSystem.Models;
-using CustomerManagementSystem.ViewModels.In;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CustomerManagementSystem.ViewModels.Out
+namespace CustomerManagementSystem.ViewModels
 {
     public class CustomersQueryViewModel
     {
