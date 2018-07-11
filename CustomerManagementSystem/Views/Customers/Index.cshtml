@@ -1,63 +1,104 @@
-﻿@model IEnumerable<CustomerManagementSystem.Models.客戶資料>
+﻿@model CustomerManagementSystem.ViewModels.Out.CustomersQueryViewModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "客戶資料管理";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("建新客戶", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.客戶名稱)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.統一編號)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.電話)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.傳真)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.地址)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th></th>
-    </tr>
+<div class="panel panel-default">
+    <div class="panel-heading">客戶資料查詢</div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Index", "Customers", FormMethod.Post, null))
+        {
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.ClientName)</label>
+                @Html.TextBoxFor(model=> Model.Query.ClientName, new { @placeholder = "客戶名稱" })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.CompanyNumber)</label>
+                @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = "統編" })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.Phone)</label>
+                @Html.TextBoxFor(model => Model.Query.Phone, new { @placeholder = "電話" })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.Fax)</label>
+                @Html.TextBoxFor(model => Model.Query.Fax, new { @placeholder = "傳真" })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.Address)</label>
+                @Html.TextBoxFor(model => Model.Query.Address, new { @placeholder = "地址" })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.Email)</label>
+                @Html.TextBoxFor(model => Model.Query.Email, new { @placeholder = "Email" })
+            </div>
+            @Html.Hidden("Take", Model.Take)
+            @Html.Hidden("Skip", Model.Skip)
+            <button type="submit" class="btn btn-primary">查詢</button>
+        }
+    </div>
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.客戶名稱)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.統一編號)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.電話)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.傳真)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.地址)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+@if (Model.Customers.Any())
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].CompanyNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].Fax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].Email)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Customers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
 
-</table>

@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-	
+using CustomerManagementSystem.ViewModels.In;
+
 namespace CustomerManagementSystem.Models
 {   
 	public  class 客戶資料Repository : EFRepository<客戶資料>, I客戶資料Repository
@@ -20,11 +21,58 @@ namespace CustomerManagementSystem.Models
         {
             entity.IsDeleted = true;
         }
+
+        public IQueryable<客戶資料> GetSearchIQueryable(CustomerQueryInModel cond)
+        {
+            var query = this.All();
+            if (cond != null)
+            {
+                if (!string.IsNullOrEmpty(cond.Address))
+                {
+                    query = query.Where(x => x.地址.Contains(cond.Address));
+                }
+                if (!string.IsNullOrEmpty(cond.ClientName))
+                {
+                    query = query.Where(x => x.客戶名稱.Contains(cond.ClientName));
+                }
+                if (!string.IsNullOrEmpty(cond.CompanyNumber))
+                {
+                    query = query.Where(x => x.統一編號.Equals(cond.CompanyNumber));
+                }
+                if (!string.IsNullOrEmpty(cond.Email))
+                {
+                    query = query.Where(x => x.Email.Equals(cond.Email));
+                }
+                if (!string.IsNullOrEmpty(cond.Fax))
+                {
+                    query = query.Where(x => x.傳真.Equals(cond.Fax));
+                }
+                if (!string.IsNullOrEmpty(cond.Phone))
+                {
+                    query = query.Where(x => x.電話.Equals(cond.Phone));
+                }
+            }
+            return query;
+        }
+
+        public List<客戶資料> Search(CustomerQueryInModel cond,int take,int skip)
+        {
+            var query = this.GetSearchIQueryable(cond);
+            return query.OrderByDescending(x=>x.Id).Skip(skip).Take(take).ToList();
+        }
+
+        public int SearchCount(CustomerQueryInModel cond)
+        {
+            var query = this.GetSearchIQueryable(cond);
+            return query.Count();
+        }
     }
 
 	public  interface I客戶資料Repository : IRepository<客戶資料>
 	{
         客戶資料 GetCustomerById(int id);
-
+        IQueryable<客戶資料> GetSearchIQueryable(CustomerQueryInModel cond);
+        List<客戶資料> Search(CustomerQueryInModel cond, int take, int skip);
+        int SearchCount(CustomerQueryInModel cond);
     }
 }

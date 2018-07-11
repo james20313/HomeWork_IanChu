@@ -7,6 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using CustomerManagementSystem.ViewModels.In;
+using CustomerManagementSystem.ViewModels.Out;
+
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -21,7 +24,39 @@ namespace CustomerManagementSystem.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            return View(CustomerRepo.All().ToList());
+            CustomersQueryViewModel result = new CustomersQueryViewModel();
+            result.Customers = CustomerRepo.Search(result.Query, result.Take, result.Skip).Select(x => new CustomersViewModel()
+            {
+                Address = x.地址,
+                ClientName = x.客戶名稱,
+                CompanyNumber = x.統一編號,
+                Email = x.Email,
+                Fax = x.傳真,
+                Phone = x.電話
+            }).ToList();
+            result.Count = CustomerRepo.SearchCount(result.Query);
+            result.Skip = result.Skip;
+            result.Take = result.Take;
+            return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult Index(CustomersQueryViewModel cond =null)
+        {
+            CustomersQueryViewModel result=new CustomersQueryViewModel();
+            result.Customers = CustomerRepo.Search(cond.Query,cond.Take,cond.Skip).Select(x=>new CustomersViewModel() {
+                Address=x.地址,
+                ClientName=x.客戶名稱,
+                CompanyNumber=x.統一編號,
+                Email=x.Email,
+                Fax=x.傳真,
+                Phone=x.電話
+            }).ToList();
+            result.Count = CustomerRepo.SearchCount(cond.Query);
+            result.Skip = cond.Skip;
+            result.Take = cond.Take;
+            result.Query = cond.Query;
+            return View(result);
         }
 
         // GET: Customers/Details/5
