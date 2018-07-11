@@ -205,6 +205,8 @@
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CustomerContactQueryCondition.cs" />
+    <Compile Include="ViewModels\CustomerContactsQueryViewModel.cs" />
     <Compile Include="ViewModels\CustomersQueryViewModel.cs" />
     <Compile Include="Models\客戶聯絡人.cs">
       <DependentUpon>客戶資料Model.tt</DependentUpon>
@@ -252,6 +254,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CustomerQueryInModel.cs" />
     <Compile Include="ViewModels\CustomersViewModel.cs" />
+    <Compile Include="ViewModels\CustometContactViewModel.cs" />
+    <Compile Include="ViewModels\PagingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

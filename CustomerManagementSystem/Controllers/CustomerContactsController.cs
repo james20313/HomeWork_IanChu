@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using CustomerManagementSystem.ViewModels;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -24,8 +25,21 @@ namespace CustomerManagementSystem.Controllers
         // GET: CustomerContacts
         public ActionResult Index()
         {
-            var 客戶聯絡人 = ContactsRepo.All().Include(客 => 客.客戶資料);
-            return View(客戶聯絡人.ToList());
+            CustomerContactsQueryViewModel result = new CustomerContactsQueryViewModel();
+            result.Contacts = ContactsRepo.Search(result.Query, result.Paging);
+            return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult Index(CustomerContactsQueryViewModel data=null)
+        {
+            CustomerContactsQueryViewModel result = new CustomerContactsQueryViewModel();
+            result.Contacts = ContactsRepo.Search(data.Query, data.Paging);
+            result.Paging.Count = ContactsRepo.SearchCount(data.Query);
+            result.Paging.Skip = data.Paging.Skip;
+            result.Paging.Take = data.Paging.Take;
+            result.Query = data.Query;
+            return View(result);
         }
 
         // GET: CustomerContacts/Details/5
