@@ -1,63 +1,112 @@
-﻿@model IEnumerable<CustomerManagementSystem.Models.客戶銀行資訊>
+﻿@model CustomerManagementSystem.ViewModels.BankAccountQueryViewModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "客戶銀行帳戶管理";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("新增客戶銀行帳戶", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.銀行名稱)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.銀行代碼)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.分行代碼)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.帳戶名稱)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.帳戶號碼)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.客戶資料.客戶名稱)
-        </th>
-        <th></th>
-    </tr>
+<div class="panel panel-default">
+    <div class="panel-heading">客戶資料查詢</div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Index", "BankAccounts", FormMethod.Post, null))
+        {
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.CustomerName)</label>
+                @Html.TextBoxFor(model => Model.Query.CustomerName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CustomerName) })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.CompanyNumber)</label>
+                @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CompanyNumber) })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.BankCode)</label>
+                @Html.TextBoxFor(model => Model.Query.BankCode, new { @placeholder = Html.DisplayNameFor(model => Model.Query.BankCode) })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.BankName)</label>
+                @Html.TextBoxFor(model => Model.Query.BankName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.BankName) })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.BankSubCode)</label>
+                @Html.TextBoxFor(model => Model.Query.BankSubCode, new { @placeholder = Html.DisplayNameFor(model => Model.Query.BankSubCode) })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.AccountName)</label>
+                @Html.TextBoxFor(model => Model.Query.AccountName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.AccountName) })
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => Model.Query.AccountNumber)</label>
+                @Html.TextBoxFor(model => Model.Query.AccountNumber, new { @placeholder = Html.DisplayNameFor(model => Model.Query.AccountNumber) })
+            </div>
+            @Html.Hidden("Take", Model.Paging.Take)
+            @Html.Hidden("Skip", Model.Paging.Skip)
+            <button type="submit" class="btn btn-primary">查詢</button>
+        }
+    </div>
+</div>
+@if (Model.BankAccounts != null && Model.BankAccounts.Any())
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].CompanyNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].BankCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].BankSubCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].BankName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].AccountName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccounts[0].AccountNumber)
+            </th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.銀行名稱)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.銀行代碼)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.分行代碼)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.帳戶名稱)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.帳戶號碼)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.客戶資料.客戶名稱)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+        @foreach (var item in Model.BankAccounts)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankSubCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+        }
+
+    </table>
 }
-
-</table>

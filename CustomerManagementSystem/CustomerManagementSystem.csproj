@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -205,6 +206,9 @@
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\BankAccountQueryCondition.cs" />
+    <Compile Include="ViewModels\BankAccountQueryViewModel.cs" />
+    <Compile Include="ViewModels\BankAccountViewModel.cs" />
     <Compile Include="ViewModels\CustomerContactQueryCondition.cs" />
     <Compile Include="ViewModels\CustomerContactsQueryViewModel.cs" />
     <Compile Include="ViewModels\CustomersQueryViewModel.cs" />

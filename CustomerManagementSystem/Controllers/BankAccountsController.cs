@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using CustomerManagementSystem.ViewModels;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -24,8 +25,21 @@ namespace CustomerManagementSystem.Controllers
         // GET: BankAccounts
         public ActionResult Index()
         {
-            var 客戶銀行資訊 = BankAccountsRepo.All().Include(客 => 客.客戶資料);
-            return View(客戶銀行資訊.ToList());
+            BankAccountQueryViewModel result = new BankAccountQueryViewModel();
+            result.BankAccounts = BankAccountsRepo.Search(result.Query, result.Paging);
+            return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult Index(BankAccountQueryViewModel data = null)
+        {
+            BankAccountQueryViewModel result = new BankAccountQueryViewModel();
+            result.BankAccounts = BankAccountsRepo.Search(data.Query, data.Paging);
+            result.Paging.Count = BankAccountsRepo.SearchCount(data.Query);
+            result.Paging.Skip = data.Paging.Skip;
+            result.Paging.Take = data.Paging.Take;
+            result.Query = data.Query;
+            return View(result);
         }
 
         // GET: BankAccounts/Details/5
