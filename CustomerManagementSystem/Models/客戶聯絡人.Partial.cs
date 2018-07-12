@@ -6,8 +6,19 @@ namespace CustomerManagementSystem.Models
     using System.ComponentModel.DataAnnotations;
 
     [MetadataType(typeof(客戶聯絡人MetaData))]
-    public partial class 客戶聯絡人
+    public partial class 客戶聯絡人 : IValidatableObject
     {
+        public IEnumerable<ValidationResult> Validate(
+        ValidationContext validationContext)
+        {
+            I客戶聯絡人Repository ContactsRepo = RepositoryHelper.Get客戶聯絡人Repository();
+            //檢查此客戶下是否有相同EMAIL的聯絡人
+            if (ContactsRepo.IsEmailExist(Email,客戶Id))
+            {
+                yield return new ValidationResult(
+                "此客戶下已經有此Email的聯絡人了!", new[] { "Email" });
+            }
+        }
     }
     
     public partial class 客戶聯絡人MetaData

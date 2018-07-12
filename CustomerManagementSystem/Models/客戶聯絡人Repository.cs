@@ -56,6 +56,11 @@ namespace CustomerManagementSystem.Models
         {
             return this.GetSearchIQuerable(cond).Count();
         }
+
+        public bool IsEmailExist(string email,int customerId)
+        {
+            return this.All().Any(x => x.客戶Id == customerId && x.Email.Equals(email));
+        }
     }
 
 	public interface I客戶聯絡人Repository : IRepository<客戶聯絡人>
@@ -64,5 +69,6 @@ namespace CustomerManagementSystem.Models
         IQueryable<客戶聯絡人> GetSearchIQuerable(CustomerContactQueryCondition cond);
         List<CustometContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging);
         int SearchCount(CustomerContactQueryCondition cond);
+        bool IsEmailExist(string email, int customerId);
     }
 }
