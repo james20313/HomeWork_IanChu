@@ -66,6 +66,15 @@ namespace CustomerManagementSystem.Models
             var query = this.GetSearchIQueryable(cond);
             return query.Count();
         }
+
+        public List<CustomerReportViewModel> GetReport()
+        {
+            return this.All().OrderBy(x=>x.Id).Select(x => new CustomerReportViewModel() {
+                CustomerName=x.客戶名稱,
+                BankAccountAmount=x.客戶銀行資訊.Count(),
+                ContactAmount=x.客戶聯絡人.Count()
+            }).ToList();
+        }
     }
 
 	public  interface I客戶資料Repository : IRepository<客戶資料>
@@ -74,5 +83,6 @@ namespace CustomerManagementSystem.Models
         IQueryable<客戶資料> GetSearchIQueryable(CustomerQueryInModel cond);
         List<客戶資料> Search(CustomerQueryInModel cond, PagingViewModel paging);
         int SearchCount(CustomerQueryInModel cond);
+        List<CustomerReportViewModel> GetReport();
     }
 }
