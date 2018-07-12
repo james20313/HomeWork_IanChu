@@ -24,7 +24,7 @@ namespace CustomerManagementSystem.Controllers
         public ActionResult Index()
         {
             CustomersQueryViewModel result = new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(result.Query, result.Take, result.Skip).Select(x => new CustomersViewModel()
+            result.Customers = CustomerRepo.Search(result.Query, result.Paging).Select(x => new CustomersViewModel()
             {
                 Address = x.地址,
                 ClientName = x.客戶名稱,
@@ -33,9 +33,9 @@ namespace CustomerManagementSystem.Controllers
                 Fax = x.傳真,
                 Phone = x.電話
             }).ToList();
-            result.Count = CustomerRepo.SearchCount(result.Query);
-            result.Skip = result.Skip;
-            result.Take = result.Take;
+            result.Paging.Count = CustomerRepo.SearchCount(result.Query);
+            result.Paging.Skip = result.Paging.Skip;
+            result.Paging.Take = result.Paging.Take;
             return View(result);
         }
 
@@ -43,7 +43,7 @@ namespace CustomerManagementSystem.Controllers
         public ActionResult Index(CustomersQueryViewModel cond =null)
         {
             CustomersQueryViewModel result=new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(cond.Query,cond.Take,cond.Skip).Select(x=>new CustomersViewModel() {
+            result.Customers = CustomerRepo.Search(cond.Query,cond.Paging).Select(x=>new CustomersViewModel() {
                 Address=x.地址,
                 ClientName=x.客戶名稱,
                 CompanyNumber=x.統一編號,
@@ -51,9 +51,9 @@ namespace CustomerManagementSystem.Controllers
                 Fax=x.傳真,
                 Phone=x.電話
             }).ToList();
-            result.Count = CustomerRepo.SearchCount(cond.Query);
-            result.Skip = cond.Skip;
-            result.Take = cond.Take;
+            result.Paging.Count = CustomerRepo.SearchCount(cond.Query);
+            result.Paging.Skip = cond.Paging.Skip;
+            result.Paging.Take = cond.Paging.Take;
             result.Query = cond.Query;
             return View(result);
         }

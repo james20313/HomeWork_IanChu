@@ -12,16 +12,12 @@ namespace CustomerManagementSystem.ViewModels
 
         public CustomerQueryInModel Query { get; set; }
 
-        public int Count { get; set; }
-
-        public int Skip { get; set; }
-
-        public int Take { get; set; }
+        public PagingViewModel Paging { get; set; }
 
         public CustomersQueryViewModel()
         {
-            this.Skip = 0;
-            this.Take = 10;
+            this.Customers = new List<CustomersViewModel>();
+            this.Paging = new PagingViewModel();
             this.Query = new CustomerQueryInModel();
         }
     }

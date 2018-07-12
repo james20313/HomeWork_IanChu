@@ -55,10 +55,10 @@ namespace CustomerManagementSystem.Models
             return query;
         }
 
-        public List<客戶資料> Search(CustomerQueryInModel cond,int take,int skip)
+        public List<客戶資料> Search(CustomerQueryInModel cond,PagingViewModel paging)
         {
             var query = this.GetSearchIQueryable(cond);
-            return query.OrderByDescending(x=>x.Id).Skip(skip).Take(take).ToList();
+            return query.OrderByDescending(x=>x.Id).Skip(paging.Skip).Take(paging.Take).ToList();
         }
 
         public int SearchCount(CustomerQueryInModel cond)
@@ -72,7 +72,7 @@ namespace CustomerManagementSystem.Models
 	{
         客戶資料 GetCustomerById(int id);
         IQueryable<客戶資料> GetSearchIQueryable(CustomerQueryInModel cond);
-        List<客戶資料> Search(CustomerQueryInModel cond, int take, int skip);
+        List<客戶資料> Search(CustomerQueryInModel cond, PagingViewModel paging);
         int SearchCount(CustomerQueryInModel cond);
     }
 }

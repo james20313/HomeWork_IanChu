@@ -38,8 +38,8 @@
                 <label>@Html.DisplayNameFor(model => Model.Query.Email)</label>
                 @Html.TextBoxFor(model => Model.Query.Email, new { @placeholder = "Email" })
             </div>
-            @Html.Hidden("Take", Model.Take)
-            @Html.Hidden("Skip", Model.Skip)
+            @Html.Hidden("Take", Model.Paging.Take)
+            @Html.Hidden("Skip", Model.Paging.Skip)
             <button type="submit" class="btn btn-primary">查詢</button>
         }
     </div>
