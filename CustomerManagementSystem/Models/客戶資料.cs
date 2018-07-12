@@ -29,7 +29,9 @@ namespace CustomerManagementSystem.Models
         public string 地址 { get; set; }
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
+        public int 類別Id { get; set; }
     
+        public virtual 客戶類別 客戶類別 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

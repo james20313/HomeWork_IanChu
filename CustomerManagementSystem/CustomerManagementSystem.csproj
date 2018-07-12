@@ -207,6 +207,15 @@
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\客戶類別.cs">
+      <DependentUpon>客戶資料Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶類別.Partial.cs">
+      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶類別Repository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\BankAccountQueryCondition.cs" />
     <Compile Include="ViewModels\BankAccountQueryViewModel.cs" />
     <Compile Include="ViewModels\BankAccountViewModel.cs" />

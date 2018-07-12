@@ -47,7 +47,11 @@ namespace CustomerManagementSystem.Models
         
         [StringLength(50, ErrorMessage="欄位長度不得大於 50 個字元")]
         public string 電話 { get; set; }
-    
+
+        public Nullable<int> 類別Id { get; set; }
+
         public virtual 客戶資料 客戶資料 { get; set; }
+
+        public virtual 客戶類別 客戶類別 { get; set; }
     }
 }
