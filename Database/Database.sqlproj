@@ -66,5 +66,6 @@
     <Build Include="dbo\Tables\客戶聯絡人.sql" />
     <Build Include="dbo\Tables\客戶資料.sql" />
     <Build Include="dbo\Tables\客戶銀行資訊.sql" />
+    <Build Include="dbo\Tables\客戶類別.sql" />
   </ItemGroup>
 </Project>
