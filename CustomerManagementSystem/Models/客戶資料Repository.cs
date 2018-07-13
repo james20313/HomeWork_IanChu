@@ -85,6 +85,11 @@ namespace CustomerManagementSystem.Models
                 ContactAmount=x.客戶聯絡人.Count()
             }).ToList();
         }
+
+        public int GetCustomerAmount()
+        {
+            return this.All().Count();
+        }
     }
 
 	public  interface I客戶資料Repository : IRepository<客戶資料>
@@ -95,5 +100,6 @@ namespace CustomerManagementSystem.Models
         List<客戶資料> SearchAll(CustomerQueryInModel cond);
         int SearchCount(CustomerQueryInModel cond);
         List<CustomerReportViewModel> GetReport();
+        int GetCustomerAmount();
     }
 }

@@ -14,6 +14,15 @@
     </div>
 </div>
 <div class="row">
+    <div class="col-md-3">
+        <h2>目前客戶數量:</h2>
+    </div>
+    <div class="col-md-9">
+        <h2 id="customerCount"></h2>
+        <button id="btnRefresh">重讀</button>
+    </div>
+</div>
+<div class="row">
     <div class="col-md-12">
         <h2>作業說明</h2>
         <p>* 請使用 "客戶資料" 這個資料庫做開發 (如附件檔案)</p>
@@ -38,3 +47,26 @@
         </p>
     </div>
 </div>
+@section scripts {
+<script type="text/javascript">
+    function getCustomerCountPromise() {
+        return $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetCustomerAmount", "Customers")",
+        });
+    }
+    function getCustomerCount() {
+        getCustomerCountPromise()
+        .done(function (data) {
+            $("#customerCount").text(data.Count);
+        })
+        .fail();
+    }
+    $(function () {
+        getCustomerCount();
+        $("#btnRefresh").click(function () {
+            getCustomerCount();
+        });
+    });
+</script>
+}

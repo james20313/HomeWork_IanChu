@@ -249,6 +249,14 @@ namespace CustomerManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public JsonResult GetCustomerAmount()
+        {
+            return Json(new {
+                Count=CustomerRepo.GetCustomerAmount()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
