@@ -15,10 +15,12 @@ namespace CustomerManagementSystem.Controllers
     public class CustomersController : Controller
     {
         private I客戶資料Repository CustomerRepo;
+        private I客戶類別Repository CustomerTypeRepo;
 
         public CustomersController()
         {
             this.CustomerRepo = RepositoryHelper.Get客戶資料Repository();
+            this.CustomerTypeRepo = RepositoryHelper.Get客戶類別Repository();
         }
         // GET: Customers
         public ActionResult Index()
@@ -29,9 +31,17 @@ namespace CustomerManagementSystem.Controllers
                 Address = x.地址,
                 ClientName = x.客戶名稱,
                 CompanyNumber = x.統一編號,
+                CustomerTypeName = x.客戶類別.類別名稱,
                 Email = x.Email,
                 Fax = x.傳真,
-                Phone = x.電話
+                Phone = x.電話,
+                Id = x.Id
+            }).ToList();
+            result.CustomerTypeList = CustomerTypeRepo.All().Select(x => new SelectListItem()
+            {
+                Text = x.類別名稱,
+                Value = x.Id.ToString(),
+                Selected = x.Id == 0 ? true : false
             }).ToList();
             result.Paging.Count = CustomerRepo.SearchCount(result.Query);
             result.Paging.Skip = result.Paging.Skip;
@@ -40,16 +50,29 @@ namespace CustomerManagementSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(CustomersQueryViewModel cond =null)
+        public ActionResult Index(CustomersQueryViewModel cond = null)
         {
-            CustomersQueryViewModel result=new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(cond.Query,cond.Paging).Select(x=>new CustomersViewModel() {
-                Address=x.地址,
-                ClientName=x.客戶名稱,
-                CompanyNumber=x.統一編號,
-                Email=x.Email,
-                Fax=x.傳真,
-                Phone=x.電話
+            CustomersQueryViewModel result = new CustomersQueryViewModel();
+            result.Customers = CustomerRepo.Search(cond.Query, cond.Paging).Select(x => new CustomersViewModel()
+            {
+                Address = x.地址,
+                ClientName = x.客戶名稱,
+                CompanyNumber = x.統一編號,
+                CustomerTypeName = x.客戶類別.類別名稱,
+                Email = x.Email,
+                Fax = x.傳真,
+                Phone = x.電話,
+                Id = x.Id
+            }).ToList();
+            result.CustomerTypeList = CustomerTypeRepo.All().ToList().Select(x => new SelectListItem()
+            {
+                Text = x.類別名稱,
+                Value = x.Id.ToString(),
+                Selected = cond != null ?
+                               cond.Query.CustomerTypeId.HasValue ?
+                                   x.Id == cond.Query.CustomerTypeId.Value ? true : false
+                               : false
+                           : false
             }).ToList();
             result.Paging.Count = CustomerRepo.SearchCount(cond.Query);
             result.Paging.Skip = cond.Paging.Skip;
@@ -70,13 +93,43 @@ namespace CustomerManagementSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(客戶資料);
+            CustomerDetailViewModel vm = new CustomerDetailViewModel()
+            {
+                CustomerTypeName = 客戶資料.客戶類別.類別名稱,
+                Email = 客戶資料.Email,
+                Id = 客戶資料.Id,
+                傳真 = 客戶資料.傳真,
+                地址 = 客戶資料.地址,
+                客戶名稱 = 客戶資料.客戶名稱,
+                統一編號 = 客戶資料.統一編號,
+                電話 = 客戶資料.電話
+            };
+            return View(vm);
+        }
+
+        private CustomerEditViewModel InitCustomerEditViewModel(客戶資料 existData = null)
+        {
+            var initData = new CustomerEditViewModel()
+            {
+                Customer = new 客戶資料() { 類別Id = 1 },
+                CustomerTypeList = CustomerTypeRepo.All().Select(x => new SelectListItem()
+                {
+                    Text = x.類別名稱,
+                    Value = x.Id.ToString(),
+                    Selected = x.Id == 1 ? true : false
+                }).ToList()
+            };
+            if (existData != null)
+            {
+                initData.Customer = existData;
+            }
+            return initData;
         }
 
         // GET: Customers/Create
         public ActionResult Create()
         {
-            return View();
+            return View(InitCustomerEditViewModel());
         }
 
         // POST: Customers/Create
@@ -84,16 +137,17 @@ namespace CustomerManagementSystem.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email")] 客戶資料 客戶資料)
+        public ActionResult Create(CustomerEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                CustomerRepo.Add(客戶資料);
+                客戶資料 newData = vm.Customer;
+                CustomerRepo.Add(newData);
                 CustomerRepo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
-            return View(客戶資料);
+            return View(vm);
         }
 
         // GET: Customers/Edit/5
@@ -108,7 +162,8 @@ namespace CustomerManagementSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(客戶資料);
+
+            return View(InitCustomerEditViewModel(客戶資料));
         }
 
         // POST: Customers/Edit/5
@@ -116,15 +171,16 @@ namespace CustomerManagementSystem.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email")] 客戶資料 客戶資料)
+        public ActionResult Edit(CustomerEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                CustomerRepo.UnitOfWork.Context.Entry(客戶資料).State = EntityState.Modified;
+                客戶資料 editData = vm.Customer;
+                CustomerRepo.UnitOfWork.Context.Entry(editData).State = EntityState.Modified;
                 CustomerRepo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
-            return View(客戶資料);
+            return View(vm);
         }
 
         // GET: Customers/Delete/5
@@ -139,7 +195,18 @@ namespace CustomerManagementSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(客戶資料);
+            CustomerDetailViewModel vm = new CustomerDetailViewModel()
+            {
+                CustomerTypeName = 客戶資料.客戶類別.類別名稱,
+                Email = 客戶資料.Email,
+                Id = 客戶資料.Id,
+                傳真 = 客戶資料.傳真,
+                地址 = 客戶資料.地址,
+                客戶名稱 = 客戶資料.客戶名稱,
+                統一編號 = 客戶資料.統一編號,
+                電話 = 客戶資料.電話
+            };
+            return View(vm);
         }
 
         // POST: Customers/Delete/5

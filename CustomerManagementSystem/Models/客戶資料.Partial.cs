@@ -3,6 +3,7 @@ namespace CustomerManagementSystem.Models
     using Attribute;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     [MetadataType(typeof(客戶資料MetaData))]
@@ -42,7 +43,8 @@ namespace CustomerManagementSystem.Models
         public bool IsDeleted { get; set; }
 
         [Required]
-        public CustomerTypeEnum 類別Id { get; set; }
+        [DisplayName("客戶類別")]
+        public int 類別Id { get; set; }
     
         public virtual 客戶類別 客戶類別 { get; set; }
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }

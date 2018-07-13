@@ -1,10 +1,10 @@
-﻿@model CustomerManagementSystem.Models.客戶資料
+﻿@model CustomerManagementSystem.ViewModels.CustomerDetailViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>客戶資料明細</h2>
 
 <div>
     <h4>客戶資料</h4>
@@ -24,6 +24,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.統一編號)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerTypeName)
         </dd>
 
         <dt>

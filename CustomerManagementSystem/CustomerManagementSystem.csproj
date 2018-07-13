@@ -180,6 +180,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attribute\CellphoneNumberAttribute.cs" />
     <Compile Include="Models\Attribute\TaiwanCompanyNumberAttribute.cs" />
@@ -224,6 +225,8 @@
     <Compile Include="ViewModels\BankAccountViewModel.cs" />
     <Compile Include="ViewModels\CustomerContactQueryCondition.cs" />
     <Compile Include="ViewModels\CustomerContactsQueryViewModel.cs" />
+    <Compile Include="ViewModels\CustomerDetailViewModel.cs" />
+    <Compile Include="ViewModels\CustomerEditViewModel.cs" />
     <Compile Include="ViewModels\CustomerReportViewModel.cs" />
     <Compile Include="ViewModels\CustomersQueryViewModel.cs" />
     <Compile Include="Models\客戶聯絡人.cs">

@@ -8,13 +8,16 @@ namespace CustomerManagementSystem.ViewModels
 {
     public class CustomersViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [DisplayName("客戶名稱")]
         public string ClientName { get; set; }
 
         [DisplayName("統一編號")]
         public string CompanyNumber { get; set; }
+
+        [DisplayName("客戶類別")]
+        public string CustomerTypeName { get; set; }
 
         [DisplayName("電話")]
         public string Phone { get; set; }

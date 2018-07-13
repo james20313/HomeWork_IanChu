@@ -51,6 +51,10 @@ namespace CustomerManagementSystem.Models
                 {
                     query = query.Where(x => x.電話.Equals(cond.Phone));
                 }
+                if (cond.CustomerTypeId.HasValue)
+                {
+                    query = query.Where(x => x.類別Id==cond.CustomerTypeId.Value);
+                }
             }
             return query;
         }
