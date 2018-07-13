@@ -1,0 +1,80 @@
+﻿@model CustomerManagementSystem.ViewModels.CustomerDetailViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>刪除客戶資料</h2>
+
+<h3>你確定要刪除這筆資料嗎?</h3>
+<div>
+    <h4>客戶資料</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.客戶名稱)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.客戶名稱)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.統一編號)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.統一編號)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.電話)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.電話)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.傳真)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.傳真)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.地址)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.地址)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

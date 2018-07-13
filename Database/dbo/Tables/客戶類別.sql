@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[客戶類別]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [類別名稱] NVARCHAR(50) NOT NULL
+)

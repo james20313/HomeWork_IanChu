@@ -1,0 +1,40 @@
+﻿@model IEnumerable<CustomerManagementSystem.ViewModels.CustomerReportViewModel>
+
+@{
+    ViewBag.Title = "客戶─聯絡人數─銀行帳戶數報表";
+}
+
+<h2>客戶─聯絡人數─銀行帳戶數報表</h2>
+@using (Html.BeginForm("GetExcel", "CustomerReport", FormMethod.Post, null))
+{
+    <button type="submit" class="btn btn-info">匯出Excel</button>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContactAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BankAccountAmount)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankAccountAmount)
+        </td>
+    </tr>
+}
+
+</table>
