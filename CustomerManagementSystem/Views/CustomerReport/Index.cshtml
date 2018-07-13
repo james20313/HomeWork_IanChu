@@ -5,6 +5,10 @@
 }
 
 <h2>客戶─聯絡人數─銀行帳戶數報表</h2>
+@using (Html.BeginForm("GetExcel", "CustomerReport", FormMethod.Post, null))
+{
+    <button type="submit" class="btn btn-info">匯出Excel</button>
+}
 
 <table class="table">
     <tr>
