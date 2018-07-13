@@ -207,6 +207,9 @@
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\客戶資料.Partial.cs">
+      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\客戶類別.cs">
       <DependentUpon>客戶資料Model.tt</DependentUpon>
     </Compile>
@@ -234,9 +237,6 @@
     </Compile>
     <Compile Include="Models\客戶資料.cs">
       <DependentUpon>客戶資料Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\客戶資料.Partial.cs">
-      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶資料Model.Context.cs">
       <AutoGen>True</AutoGen>
