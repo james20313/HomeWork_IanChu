@@ -53,6 +53,21 @@ namespace CustomerManagementSystem.Models
             }).ToList();
         }
 
+        public List<BankAccountViewModel> Search(BankAccountQueryCondition cond)
+        {
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Select(x => new BankAccountViewModel()
+            {
+                AccountName = x.帳戶名稱,
+                AccountNumber = x.帳戶號碼,
+                BankCode = x.銀行代碼,
+                BankName = x.銀行名稱,
+                BankSubCode = x.分行代碼,
+                CompanyNumber = x.客戶資料.統一編號,
+                CustomerName = x.客戶資料.客戶名稱,
+                Id = x.Id
+            }).ToList();
+        }
+
         public int SearchCount(BankAccountQueryCondition cond)
         {
             return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Count();
@@ -63,6 +78,7 @@ namespace CustomerManagementSystem.Models
 	{
         客戶銀行資訊 GetBankAccountById(int id);
         IQueryable<客戶銀行資訊> GetSearchIQuerable(BankAccountQueryCondition cond);
+        List<BankAccountViewModel> Search(BankAccountQueryCondition cond);
         List<BankAccountViewModel> Search(BankAccountQueryCondition cond, PagingViewModel paging);
         int SearchCount(BankAccountQueryCondition cond);
     }

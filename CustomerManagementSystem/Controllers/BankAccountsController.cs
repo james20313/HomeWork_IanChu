@@ -8,6 +8,9 @@ using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
 using CustomerManagementSystem.ViewModels;
+using ClosedXML.Excel;
+using WebApplication1.Models;
+using ClosedXML.Extensions;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -40,6 +43,23 @@ namespace CustomerManagementSystem.Controllers
             result.Paging.Take = data.Paging.Take;
             result.Query = data.Query;
             return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult GetExcel(BankAccountQueryViewModel cond = null)
+        {
+
+            using (var wb = GetExcelFile(cond))
+            {
+                // Add ClosedXML.Extensions in your using declarations
+                return wb.Deliver($"ExportCustomerBankAccount_{DateTime.Now.ToString("yyyyMMddHHmmss")}.xlsx");
+            }
+        }
+
+        private XLWorkbook GetExcelFile(BankAccountQueryViewModel cond = null)
+        {
+            List<BankAccountViewModel> list = BankAccountsRepo.Search(cond.Query);
+            return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
         // GET: BankAccounts/Details/5
