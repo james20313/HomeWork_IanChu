@@ -52,6 +52,21 @@ namespace CustomerManagementSystem.Models
             }).ToList();
         }
 
+        public List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond)
+        {
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Select(x => new CustometContactViewModel()
+            {
+                CompanyNumber = x.客戶資料.統一編號,
+                CustomerName = x.客戶資料.客戶名稱,
+                Email = x.Email,
+                Id = x.Id,
+                姓名 = x.姓名,
+                手機 = x.手機,
+                職稱 = x.職稱,
+                電話 = x.電話
+            }).ToList();
+        }
+
         public int SearchCount(CustomerContactQueryCondition cond)
         {
             return this.GetSearchIQuerable(cond).Count();
@@ -68,6 +83,7 @@ namespace CustomerManagementSystem.Models
         客戶聯絡人 GetContactById(int id);
         IQueryable<客戶聯絡人> GetSearchIQuerable(CustomerContactQueryCondition cond);
         List<CustometContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging);
+        List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond);
         int SearchCount(CustomerContactQueryCondition cond);
         bool IsEmailExist(string email, int customerId);
     }
