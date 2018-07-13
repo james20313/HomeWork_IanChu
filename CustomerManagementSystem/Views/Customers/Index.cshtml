@@ -46,6 +46,7 @@
             @Html.Hidden("Take", Model.Paging.Take)
             @Html.Hidden("Skip", Model.Paging.Skip)
             <button type="submit" class="btn btn-primary">查詢</button>
+            <button type="submit" class="btn btn-info" formaction='@Url.Action("GetExcel")'>匯出Excel</button>
         }
     </div>
 </div>

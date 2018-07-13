@@ -8,7 +8,9 @@ using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
 using CustomerManagementSystem.ViewModels;
-
+using ClosedXML.Excel;
+using WebApplication1.Models;
+using ClosedXML.Extensions;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -79,6 +81,33 @@ namespace CustomerManagementSystem.Controllers
             result.Paging.Take = cond.Paging.Take;
             result.Query = cond.Query;
             return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult GetExcel(CustomersQueryViewModel cond = null)
+        {
+            
+            using (var wb = GetExcelFile(cond))
+            {
+                // Add ClosedXML.Extensions in your using declarations
+                return wb.Deliver($"ExportCustomer_{DateTime.Now.ToString("yyyyMMddHHmmss")}.xlsx");
+            }
+        }
+
+        private XLWorkbook GetExcelFile(CustomersQueryViewModel cond = null)
+        {
+            List<CustomersViewModel> list= CustomerRepo.Search(cond.Query, cond.Paging).Select(x => new CustomersViewModel()
+            {
+                Address = x.地址,
+                ClientName = x.客戶名稱,
+                CompanyNumber = x.統一編號,
+                CustomerTypeName = x.客戶類別.類別名稱,
+                Email = x.Email,
+                Fax = x.傳真,
+                Phone = x.電話,
+                Id = x.Id
+            }).ToList();
+            return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
         // GET: Customers/Details/5
