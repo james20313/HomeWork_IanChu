@@ -5,12 +5,12 @@ using CustomerManagementSystem.ViewModels;
 using System.Data.Entity;
 
 namespace CustomerManagementSystem.Models
-{   
-	public  class 客戶資料Repository : EFRepository<客戶資料>, I客戶資料Repository
-	{
+{
+    public class 客戶資料Repository : EFRepository<客戶資料>, I客戶資料Repository
+    {
         public 客戶資料 GetCustomerById(int id)
         {
-            return this.All().FirstOrDefault(x => x.Id==id);
+            return this.All().FirstOrDefault(x => x.Id == id);
         }
 
         public override IQueryable<客戶資料> All()
@@ -54,16 +54,16 @@ namespace CustomerManagementSystem.Models
                 }
                 if (cond.CustomerTypeId.HasValue)
                 {
-                    query = query.Where(x => x.類別Id==cond.CustomerTypeId.Value);
+                    query = query.Where(x => x.類別Id == cond.CustomerTypeId.Value);
                 }
             }
             return query;
         }
 
-        public List<客戶資料> Search(CustomerQueryInModel cond,PagingViewModel paging)
+        public List<客戶資料> Search(CustomerQueryInModel cond, PagingViewModel paging, SortingViewModel sort)
         {
             var query = this.GetSearchIQueryable(cond);
-            return query.OrderByDescending(x=>x.Id).Skip(paging.Skip).Take(paging.Take).AsNoTracking().ToList();
+            return query.Sort(sort).Skip(paging.Skip).Take(paging.Take).AsNoTracking().ToList();
         }
 
         public List<客戶資料> SearchAll(CustomerQueryInModel cond)
@@ -80,10 +80,11 @@ namespace CustomerManagementSystem.Models
 
         public List<CustomerReportViewModel> GetReport()
         {
-            return this.All().OrderBy(x=>x.Id).AsNoTracking().Select(x => new CustomerReportViewModel() {
-                CustomerName=x.客戶名稱,
-                BankAccountAmount=x.客戶銀行資訊.Count(),
-                ContactAmount=x.客戶聯絡人.Count()
+            return this.All().OrderBy(x => x.Id).AsNoTracking().Select(x => new CustomerReportViewModel()
+            {
+                CustomerName = x.客戶名稱,
+                BankAccountAmount = x.客戶銀行資訊.Count(),
+                ContactAmount = x.客戶聯絡人.Count()
             }).ToList();
         }
 
@@ -93,11 +94,11 @@ namespace CustomerManagementSystem.Models
         }
     }
 
-	public  interface I客戶資料Repository : IRepository<客戶資料>
-	{
+    public interface I客戶資料Repository : IRepository<客戶資料>
+    {
         客戶資料 GetCustomerById(int id);
         IQueryable<客戶資料> GetSearchIQueryable(CustomerQueryInModel cond);
-        List<客戶資料> Search(CustomerQueryInModel cond, PagingViewModel paging);
+        List<客戶資料> Search(CustomerQueryInModel cond, PagingViewModel paging, SortingViewModel sort);
         List<客戶資料> SearchAll(CustomerQueryInModel cond);
         int SearchCount(CustomerQueryInModel cond);
         List<CustomerReportViewModel> GetReport();

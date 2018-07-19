@@ -1,7 +1,19 @@
 ﻿@model CustomerManagementSystem.ViewModels.CustomersQueryViewModel
-
+@using CustomerManagementSystem.Helpers;
 @{
     ViewBag.Title = "客戶資料管理";
+
+    //準備ROUTE DICTIONARY DATA
+    var routeNow = Request.RequestContext.RouteData.Values;
+    foreach (var queryString in Request.QueryString.AllKeys)
+    {
+        if (routeNow[queryString] == null)
+        {
+            routeNow.Add(queryString, Request.QueryString[queryString]);
+        }
+    }
+
+
 }
 
 <h2>Index</h2>
@@ -12,20 +24,20 @@
 <div class="panel panel-default">
     <div class="panel-heading">客戶資料查詢</div>
     <div class="panel-body">
-        @using (Html.BeginForm("Index", "Customers", FormMethod.Post, null))
+        @using (Html.BeginForm("Index", "Customers", FormMethod.Get, null))
         {
             <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.ClientName)</label>
-                @Html.TextBoxFor(model=> Model.Query.ClientName, new { @placeholder = "客戶名稱", @class = "form-control" })
+                @Html.TextBoxFor(model => Model.Query.ClientName, new { @placeholder = "客戶名稱", @class = "form-control" })
             </div>
             <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.CompanyNumber)</label>
                 @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = "統編", @class = "form-control" })
             </div>
             <div class="form-group col-sm-12">
-                
+
                 <label>@Html.DisplayNameFor(model => Model.Query.CustomerTypeId)</label>
-                @Html.DropDownListFor(model => Model.Query.CustomerTypeId, Model.CustomerTypeList,"不指定", htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => Model.Query.CustomerTypeId, Model.CustomerTypeList, "不指定", htmlAttributes: new { @class = "form-control" })
             </div>
             <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Phone)</label>
@@ -56,25 +68,46 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].ClientName)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].ClientName).ToHtmlString()
+               , "Index"
+               , routeNow, "ClientName", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].CompanyNumber)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].CompanyNumber).ToHtmlString()
+               , "Index"
+               , routeNow, "CompanyNumber", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].CustomerTypeName)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].CustomerTypeName).ToHtmlString()
+               , "Index"
+               , routeNow, "CustomerTypeName", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].Phone)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].Phone).ToHtmlString()
+               , "Index"
+               , routeNow, "Phone", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].Fax)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].Fax).ToHtmlString()
+               , "Index"
+               , routeNow, "Fax", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].Address)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].Address).ToHtmlString()
+               , "Index"
+               , routeNow, "Address", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].Email)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Customers[0].Email).ToHtmlString()
+               , "Index"
+               , routeNow, "Email", "asc")
             </th>
             <th></th>
         </tr>

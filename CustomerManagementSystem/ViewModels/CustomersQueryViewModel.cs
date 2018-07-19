@@ -17,11 +17,14 @@ namespace CustomerManagementSystem.ViewModels
 
         public PagingViewModel Paging { get; set; }
 
+        public SortingViewModel Sort { get; set; }
+
         public CustomersQueryViewModel()
         {
             this.Customers = new List<CustomersViewModel>();
             this.Paging = new PagingViewModel();
             this.Query = new CustomerQueryInModel();
+            this.Sort = new SortingViewModel();
         }
     }
 }

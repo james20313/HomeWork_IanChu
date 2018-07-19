@@ -225,6 +225,7 @@
     <Compile Include="Models\EFUnitOfWork.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extensions\客戶資料RepositoryExtension.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IRepository.cs">
       <AutoGen>True</AutoGen>
@@ -304,6 +305,7 @@
     <Compile Include="ViewModels\CustomersViewModel.cs" />
     <Compile Include="ViewModels\CustometContactViewModel.cs" />
     <Compile Include="ViewModels\PagingViewModel.cs" />
+    <Compile Include="ViewModels\SortingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

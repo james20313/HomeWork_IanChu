@@ -24,38 +24,17 @@ namespace CustomerManagementSystem.Controllers
             this.CustomerRepo = RepositoryHelper.Get客戶資料Repository();
             this.CustomerTypeRepo = RepositoryHelper.Get客戶類別Repository();
         }
-        // GET: Customers
-        public ActionResult Index()
-        {
-            CustomersQueryViewModel result = new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(result.Query, result.Paging).Select(x => new CustomersViewModel()
-            {
-                Address = x.地址,
-                ClientName = x.客戶名稱,
-                CompanyNumber = x.統一編號,
-                CustomerTypeName = x.客戶類別.類別名稱,
-                Email = x.Email,
-                Fax = x.傳真,
-                Phone = x.電話,
-                Id = x.Id
-            }).ToList();
-            result.CustomerTypeList = CustomerTypeRepo.All().Select(x => new SelectListItem()
-            {
-                Text = x.類別名稱,
-                Value = x.Id.ToString(),
-                Selected = x.Id == 0 ? true : false
-            }).ToList();
-            result.Paging.Count = CustomerRepo.SearchCount(result.Query);
-            result.Paging.Skip = result.Paging.Skip;
-            result.Paging.Take = result.Paging.Take;
-            return View(result);
-        }
-
-        [HttpPost]
+        
         public ActionResult Index(CustomersQueryViewModel cond = null)
         {
             CustomersQueryViewModel result = new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(cond.Query, cond.Paging).Select(x => new CustomersViewModel()
+            if (cond == null)
+            {
+                //預設排序
+                result.Sort.Column = "Id";
+                result.Sort.Sort = "desc";
+            }
+            result.Customers = CustomerRepo.Search(cond.Query, cond.Paging, cond.Sort).Select(x => new CustomersViewModel()
             {
                 Address = x.地址,
                 ClientName = x.客戶名稱,
@@ -96,7 +75,7 @@ namespace CustomerManagementSystem.Controllers
 
         private XLWorkbook GetExcelFile(CustomersQueryViewModel cond = null)
         {
-            List<CustomersViewModel> list= CustomerRepo.Search(cond.Query, cond.Paging).Select(x => new CustomersViewModel()
+            List<CustomersViewModel> list= CustomerRepo.Search(cond.Query, cond.Paging, cond.Sort).Select(x => new CustomersViewModel()
             {
                 Address = x.地址,
                 ClientName = x.客戶名稱,
