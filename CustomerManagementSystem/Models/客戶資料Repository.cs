@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CustomerManagementSystem.ViewModels;
+using System.Data.Entity;
 
 namespace CustomerManagementSystem.Models
 {   
@@ -62,24 +63,24 @@ namespace CustomerManagementSystem.Models
         public List<客戶資料> Search(CustomerQueryInModel cond,PagingViewModel paging)
         {
             var query = this.GetSearchIQueryable(cond);
-            return query.OrderByDescending(x=>x.Id).Skip(paging.Skip).Take(paging.Take).ToList();
+            return query.OrderByDescending(x=>x.Id).Skip(paging.Skip).Take(paging.Take).AsNoTracking().ToList();
         }
 
         public List<客戶資料> SearchAll(CustomerQueryInModel cond)
         {
             var query = this.GetSearchIQueryable(cond);
-            return query.OrderByDescending(x => x.Id).ToList();
+            return query.OrderByDescending(x => x.Id).AsNoTracking().ToList();
         }
 
         public int SearchCount(CustomerQueryInModel cond)
         {
             var query = this.GetSearchIQueryable(cond);
-            return query.Count();
+            return query.AsNoTracking().Count();
         }
 
         public List<CustomerReportViewModel> GetReport()
         {
-            return this.All().OrderBy(x=>x.Id).Select(x => new CustomerReportViewModel() {
+            return this.All().OrderBy(x=>x.Id).AsNoTracking().Select(x => new CustomerReportViewModel() {
                 CustomerName=x.客戶名稱,
                 BankAccountAmount=x.客戶銀行資訊.Count(),
                 ContactAmount=x.客戶聯絡人.Count()

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CustomerManagementSystem.ViewModels;
+using System.Data.Entity;
 
 namespace CustomerManagementSystem.Models
 {   
@@ -41,7 +42,7 @@ namespace CustomerManagementSystem.Models
 
         public List<BankAccountViewModel> Search(BankAccountQueryCondition cond,PagingViewModel paging)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Skip(paging.Skip).Take(paging.Take).Select(x => new BankAccountViewModel() {
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Skip(paging.Skip).Take(paging.Take).AsNoTracking().Select(x => new BankAccountViewModel() {
                 AccountName=x.帳戶名稱,
                 AccountNumber=x.帳戶號碼,
                 BankCode=x.銀行代碼,
@@ -55,7 +56,7 @@ namespace CustomerManagementSystem.Models
 
         public List<BankAccountViewModel> Search(BankAccountQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Select(x => new BankAccountViewModel()
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).AsNoTracking().Select(x => new BankAccountViewModel()
             {
                 AccountName = x.帳戶名稱,
                 AccountNumber = x.帳戶號碼,
@@ -70,7 +71,7 @@ namespace CustomerManagementSystem.Models
 
         public int SearchCount(BankAccountQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Count();
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).AsNoTracking().Count();
         }
     }
 

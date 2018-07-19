@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CustomerManagementSystem.ViewModels;
+using System.Data.Entity;
 
 namespace CustomerManagementSystem.Models
 {   
@@ -40,7 +41,7 @@ namespace CustomerManagementSystem.Models
 
         public List<CustometContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Skip(paging.Skip).Take(paging.Take).Select(x=>new CustometContactViewModel() {
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Skip(paging.Skip).Take(paging.Take).AsNoTracking().Select(x=>new CustometContactViewModel() {
                 CompanyNumber=x.客戶資料.統一編號,
                 CustomerName=x.客戶資料.客戶名稱,
                 Email=x.Email,
@@ -54,7 +55,7 @@ namespace CustomerManagementSystem.Models
 
         public List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Select(x => new CustometContactViewModel()
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).AsNoTracking().Select(x => new CustometContactViewModel()
             {
                 CompanyNumber = x.客戶資料.統一編號,
                 CustomerName = x.客戶資料.客戶名稱,
@@ -69,7 +70,7 @@ namespace CustomerManagementSystem.Models
 
         public int SearchCount(CustomerContactQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).Count();
+            return this.GetSearchIQuerable(cond).AsNoTracking().Count();
         }
 
         public bool IsEmailExist(string email,int customerId)
