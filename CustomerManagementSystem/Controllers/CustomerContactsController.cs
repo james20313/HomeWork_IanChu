@@ -25,19 +25,10 @@ namespace CustomerManagementSystem.Controllers
             this.CustomerRepo = RepositoryHelper.Get客戶資料Repository(this.ContactsRepo.UnitOfWork);
         }
 
-        // GET: CustomerContacts
-        public ActionResult Index()
-        {
-            CustomerContactsQueryViewModel result = new CustomerContactsQueryViewModel();
-            result.Contacts = ContactsRepo.Search(result.Query, result.Paging);
-            return View(result);
-        }
-
-        [HttpPost]
         public ActionResult Index(CustomerContactsQueryViewModel data=null)
         {
             CustomerContactsQueryViewModel result = new CustomerContactsQueryViewModel();
-            result.Contacts = ContactsRepo.Search(data.Query, data.Paging);
+            result.Contacts = ContactsRepo.Search(data.Query, data.Paging, data.Sort);
             result.Paging.Count = ContactsRepo.SearchCount(data.Query);
             result.Paging.Skip = data.Paging.Skip;
             result.Paging.Take = data.Paging.Take;

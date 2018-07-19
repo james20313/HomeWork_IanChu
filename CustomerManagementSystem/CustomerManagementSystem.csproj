@@ -225,6 +225,7 @@
     <Compile Include="Models\EFUnitOfWork.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extensions\客戶聯絡人RepositoryExtension.cs" />
     <Compile Include="Models\Extensions\客戶資料RepositoryExtension.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IRepository.cs">
@@ -238,6 +239,9 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶聯絡人.Partial.cs">
+      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶資料.Partial.cs">
       <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
@@ -262,9 +266,6 @@
     <Compile Include="ViewModels\CustomersQueryViewModel.cs" />
     <Compile Include="Models\客戶聯絡人.cs">
       <DependentUpon>客戶資料Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\客戶聯絡人.Partial.cs">
-      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶聯絡人Repository.cs">
       <DependentUpon>IRepository.tt</DependentUpon>

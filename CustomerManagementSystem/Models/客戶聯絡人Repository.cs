@@ -39,9 +39,14 @@ namespace CustomerManagementSystem.Models
             return query;
         }
 
-        public List<CustometContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging)
+        public List<CustometContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging,SortingViewModel sort)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Skip(paging.Skip).Take(paging.Take).AsNoTracking().Select(x=>new CustometContactViewModel() {
+            return this.GetSearchIQuerable(cond)
+                .Sort(sort)
+                .Skip(paging.Skip)
+                .Take(paging.Take)
+                .AsNoTracking()
+                .Select(x=>new CustometContactViewModel() {
                 CompanyNumber=x.客戶資料.統一編號,
                 CustomerName=x.客戶資料.客戶名稱,
                 Email=x.Email,
@@ -83,7 +88,7 @@ namespace CustomerManagementSystem.Models
 	{
         客戶聯絡人 GetContactById(int id);
         IQueryable<客戶聯絡人> GetSearchIQuerable(CustomerContactQueryCondition cond);
-        List<CustometContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging);
+        List<CustometContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging, SortingViewModel sort);
         List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond);
         int SearchCount(CustomerContactQueryCondition cond);
         bool IsEmailExist(string email, int customerId);

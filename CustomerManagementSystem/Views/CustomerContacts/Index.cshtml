@@ -1,7 +1,18 @@
 ﻿@model CustomerManagementSystem.ViewModels.CustomerContactsQueryViewModel
+@using CustomerManagementSystem.Helpers;
 
 @{
     ViewBag.Title = "客戶聯絡人管理";
+
+    //準備ROUTE DICTIONARY DATA
+    var routeNow = Request.RequestContext.RouteData.Values;
+    foreach (var queryString in Request.QueryString.AllKeys)
+    {
+        if (routeNow[queryString] == null)
+        {
+            routeNow.Add(queryString, Request.QueryString[queryString]);
+        }
+    }
 }
 
 <h2>客戶聯絡人管理</h2>
@@ -12,35 +23,35 @@
 <div class="panel panel-default">
     <div class="panel-heading">客戶資料查詢</div>
     <div class="panel-body">
-        @using (Html.BeginForm("Index", "CustomerContacts", FormMethod.Post, null))
+        @using (Html.BeginForm("Index", "CustomerContacts", FormMethod.Get, null))
         {
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.CompanyNumber)</label>
-                @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CompanyNumber) })
+                @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CompanyNumber), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.CustomerName)</label>
-                @Html.TextBoxFor(model => Model.Query.CustomerName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CustomerName) })
+                @Html.TextBoxFor(model => Model.Query.CustomerName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CustomerName), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.ContactName)</label>
-                @Html.TextBoxFor(model => Model.Query.ContactName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.ContactName) })
+                @Html.TextBoxFor(model => Model.Query.ContactName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.ContactName), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Mobile)</label>
-                @Html.TextBoxFor(model => Model.Query.Mobile, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Mobile) })
+                @Html.TextBoxFor(model => Model.Query.Mobile, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Mobile), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Phone)</label>
-                @Html.TextBoxFor(model => Model.Query.Phone, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Phone) })
+                @Html.TextBoxFor(model => Model.Query.Phone, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Phone), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.JobName)</label>
-                @Html.TextBoxFor(model => Model.Query.JobName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.JobName) })
+                @Html.TextBoxFor(model => Model.Query.JobName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.JobName), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Email)</label>
-                @Html.TextBoxFor(model => Model.Query.Email, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Email) })
+                @Html.TextBoxFor(model => Model.Query.Email, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Email), @class = "form-control" })
             </div>
             @Html.Hidden("Take", Model.Paging.Take)
             @Html.Hidden("Skip", Model.Paging.Skip)
@@ -54,25 +65,46 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber).ToHtmlString()
+               , "Index"
+               , routeNow, "CompanyNumber", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].CustomerName)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CustomerName).ToHtmlString()
+               , "Index"
+               , routeNow, "CustomerName", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].職稱)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].職稱).ToHtmlString()
+               , "Index"
+               , routeNow, "JobName", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].姓名)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].姓名).ToHtmlString()
+               , "Index"
+               , routeNow, "ContactName", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].Email)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].Email).ToHtmlString()
+               , "Index"
+               , routeNow, "Email", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].手機)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].手機).ToHtmlString()
+               , "Index"
+               , routeNow, "Mobile", "asc")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].電話)
+                @Html.SortActionLink(m=>Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].電話).ToHtmlString()
+               , "Index"
+               , routeNow, "Phone", "asc")
             </th>
             <th></th>
         </tr>
