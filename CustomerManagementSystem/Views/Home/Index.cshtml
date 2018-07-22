@@ -7,10 +7,10 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-            @Html.ActionLink("客戶資料管理", "Index", "Customers", new { area = "" }, new { @class= "btn btn-primary" })
-            @Html.ActionLink("客戶聯絡人管理", "Index", "CustomerContacts", new { area = "" }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts", new { area = "" }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("客戶─聯絡人數─銀行帳戶數報表", "Index", "CustomerReport", new { area = "" }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("客戶資料管理", "Index", "Customers", new { area = "" }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("客戶聯絡人管理", "Index", "CustomerContacts", new { area = "" }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts", new { area = "" }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("客戶─聯絡人數─銀行帳戶數報表", "Index", "CustomerReport", new { area = "" }, new { @class = "btn btn-primary" })
     </div>
 </div>
 <div class="row">
@@ -24,7 +24,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <h2>作業說明</h2>
+        <h2>第一週 作業說明</h2>
         <p>* 請使用 "客戶資料" 這個資料庫做開發 (如附件檔案)</p>
         <p>* 請實作出「客戶資料管理」、「客戶聯絡人管理」與「客戶銀行帳戶管理」等簡易 CRUD 功能 (盡量做各種功能出來)</p>
         <p>* 在列表頁要實作「搜尋」功能</p>
@@ -46,27 +46,45 @@
             * 使用 ClosedXML 這個 NuGet 套件實作資料匯出功能，每個清單頁上都要有可以匯出 Excel 檔案的功能，要用到 FileResult 下載檔案
         </p>
     </div>
+    <div class="col-md-12">
+        <h2>第二週 作業說明</h2>
+        <p>* 延續上周作業加以延伸開發</p>
+        <p>*實作在「客戶資料」的詳細資料頁面，加上「客戶聯絡人」清單</p>
+        <p>*請多加利用範本檢視的開發技巧整理View頁面</p>
+        <p>*讓客戶聯絡人清單支援「批次更新」功能，可批次修改「職稱、手機、電話」這三個欄位，其他欄位不允許修改</p>
+        <p>*在特定幾個可能發生例外的頁面，特別套用[HandleError]屬性，針對特定例外給予不同的自訂錯誤頁面，自訂錯誤頁面要能看出發生例外的實際原因</p>
+        <p>*自訂一個動作過濾器，可以記錄每個Action與ActionResult執行的時間，資料可以輸出到Debug輸出視窗</p>
+        <p>*套用任意一個現成的網頁版面，可下載免費版面，或使用我在課堂上給你們的版面進行套版</p>
+        <p>*網頁版面必須要有主選單(menu)、每頁都不同的導覽路標(breadcrumb)、需用到@@section</p>
+        <p>*請使用X.PagedList.Mvc這個NuGet套件實作列表頁的分頁功能</p>
+        <p>*實作表單驗證機制(FormsAuthentication)</p>
+        <p>*要在「客戶資料」表格加上【帳號】、【密碼】欄位</p>
+        <p>*密碼欄位須加密或做雜湊處裡(Hash)</p>
+        <p>*要有登入、登出功能</p>
+        <p>*參考文章:http://blog.miniasp.com/post/2008/02/20/Explain-Forms-Authentication-in-ASPNET-20.aspx</p>
+        <p>*客戶登入後只有一個【修改客戶資料】功能，但只能修改【密碼、電話、傳真、地址、Email】等欄位，其他欄位不能被修改或更新。</p>
+    </div>
 </div>
 @section scripts {
-<script type="text/javascript">
-    function getCustomerCountPromise() {
-        return $.ajax({
-            type: "GET",
-            url: "@Url.Action("GetCustomerAmount", "Customers")",
-        });
-    }
-    function getCustomerCount() {
-        getCustomerCountPromise()
-        .done(function (data) {
-            $("#customerCount").text(data.Count);
-        })
-        .fail();
-    }
-    $(function () {
-        getCustomerCount();
-        $("#btnRefresh").click(function () {
+    <script type="text/javascript">
+        function getCustomerCountPromise() {
+            return $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCustomerAmount", "Customers")",
+            });
+        }
+        function getCustomerCount() {
+            getCustomerCountPromise()
+            .done(function (data) {
+                $("#customerCount").text(data.Count);
+            })
+            .fail();
+        }
+        $(function () {
             getCustomerCount();
+            $("#btnRefresh").click(function () {
+                getCustomerCount();
+            });
         });
-    });
-</script>
+    </script>
 }
