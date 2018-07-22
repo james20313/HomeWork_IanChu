@@ -82,6 +82,24 @@ namespace CustomerManagementSystem.Models
         {
             return this.All().Any(x => x.客戶Id == customerId && x.Email.Equals(email));
         }
+
+        /// <summary> 取得客戶底下所有聯絡人 </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<CustometContactViewModel> GetListByCustomerId(int id)
+        {
+            return this.All().Where(x => x.客戶Id == id).Select(x => new CustometContactViewModel
+            {
+                CompanyNumber=x.客戶資料.統一編號,
+                CustomerName=x.客戶資料.客戶名稱,
+                Id=x.Id,
+                Email=x.Email,
+                姓名=x.姓名,
+                手機=x.手機,
+                職稱=x.職稱,
+                電話 =x.電話
+            }).ToList();
+        }
     }
 
 	public interface I客戶聯絡人Repository : IRepository<客戶聯絡人>
@@ -92,5 +110,6 @@ namespace CustomerManagementSystem.Models
         List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond);
         int SearchCount(CustomerContactQueryCondition cond);
         bool IsEmailExist(string email, int customerId);
+        List<CustometContactViewModel> GetListByCustomerId(int id);
     }
 }

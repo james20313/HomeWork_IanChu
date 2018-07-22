@@ -18,11 +18,13 @@ namespace CustomerManagementSystem.Controllers
     {
         private I客戶資料Repository CustomerRepo;
         private I客戶類別Repository CustomerTypeRepo;
+        private I客戶聯絡人Repository ContactsRepo;
 
         public CustomersController()
         {
             this.CustomerRepo = RepositoryHelper.Get客戶資料Repository();
-            this.CustomerTypeRepo = RepositoryHelper.Get客戶類別Repository();
+            this.CustomerTypeRepo = RepositoryHelper.Get客戶類別Repository(this.CustomerRepo.UnitOfWork);
+            this.ContactsRepo = RepositoryHelper.Get客戶聯絡人Repository(this.CustomerRepo.UnitOfWork);
         }
         
         public ActionResult Index(CustomersQueryViewModel cond = null)
@@ -234,6 +236,19 @@ namespace CustomerManagementSystem.Controllers
             return Json(new {
                 Count=CustomerRepo.GetCustomerAmount()
             }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary> 取得客戶底下所有聯絡人 </summary>
+        /// <param name="id"></param>
+        /// <returns>部分檢視</returns>
+        public ActionResult ListAllContacts(int id)
+        {
+            if (id == 0)
+                return new HttpNotFoundResult("請輸入客戶ID");
+
+            var list = this.ContactsRepo.GetListByCustomerId(id);
+            return PartialView("_ContactList", list);
         }
 
         protected override void Dispose(bool disposing)
