@@ -1,29 +1,27 @@
 ﻿@{
     ViewBag.Title = "首頁";
 }
+<h1>MVC開發實戰 Week1 Homework</h1>
 
-<div class="jumbotron">
-    <h1>MVC開發實戰 Week1 Homework</h1>
-</div>
-<div class="row">
-    <div class="col-md-12">
+<div>
+    <div>
         @Html.ActionLink("客戶資料管理", "Index", "Customers", new { area = "" }, new { @class = "btn btn-primary" })
         @Html.ActionLink("客戶聯絡人管理", "Index", "CustomerContacts", new { area = "" }, new { @class = "btn btn-primary" })
         @Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts", new { area = "" }, new { @class = "btn btn-primary" })
         @Html.ActionLink("客戶─聯絡人數─銀行帳戶數報表", "Index", "CustomerReport", new { area = "" }, new { @class = "btn btn-primary" })
     </div>
 </div>
-<div class="row">
-    <div class="col-md-3">
+<div>
+    <div>
         <h2>目前客戶數量:</h2>
     </div>
-    <div class="col-md-9">
+    <div>
         <h2 id="customerCount"></h2>
         <button id="btnRefresh">重讀</button>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
+<div>
+    <div>
         <h2>第一週 作業說明</h2>
         <p>* 請使用 "客戶資料" 這個資料庫做開發 (如附件檔案)</p>
         <p>* 請實作出「客戶資料管理」、「客戶聯絡人管理」與「客戶銀行帳戶管理」等簡易 CRUD 功能 (盡量做各種功能出來)</p>
@@ -45,8 +43,6 @@
         <p>
             * 使用 ClosedXML 這個 NuGet 套件實作資料匯出功能，每個清單頁上都要有可以匯出 Excel 檔案的功能，要用到 FileResult 下載檔案
         </p>
-    </div>
-    <div class="col-md-12">
         <h2>第二週 作業說明</h2>
         <p>* 延續上周作業加以延伸開發</p>
         <p>*實作在「客戶資料」的詳細資料頁面，加上「客戶聯絡人」清單</p>
