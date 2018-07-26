@@ -6,7 +6,7 @@ using System.Web;
 
 namespace CustomerManagementSystem.ViewModels
 {
-    public class CustometContactViewModel
+    public class CustomerContactViewModel
     {
         public int Id { get; set; }
 

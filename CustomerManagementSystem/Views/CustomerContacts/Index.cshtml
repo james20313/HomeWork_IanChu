@@ -66,89 +66,186 @@
             @Html.Hidden("Skip", Model.Paging.Skip)
             <button type="submit" class="btn btn-primary">查詢</button>
             <button type="submit" class="btn btn-info" formaction='@Url.Action("GetExcel")'>匯出Excel</button>
+            @Html.ActionLink("批次編輯", "Index", new { BatchEdit = true }, new { @class = "waves-effect waves-light btn" })
         }
     </div>
 </div>
+<br />
 @if (Model.Contacts.Any())
 {
-    <table class="striped highlight">
-        <tr>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+    if (!Model.BatchEdit)
+    {
+        <table class="striped highlight">
+            <tr>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber).ToHtmlString()
                , "Index"
                , routeNow, "CompanyNumber", "asc")
-            </th>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].CustomerName).ToHtmlString()
                , "Index"
                , routeNow, "CustomerName", "asc")
-            </th>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].職稱).ToHtmlString()
                , "Index"
                , routeNow, "JobName", "asc")
-            </th>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].姓名).ToHtmlString()
                , "Index"
                , routeNow, "ContactName", "asc")
-            </th>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].Email).ToHtmlString()
                , "Index"
                , routeNow, "Email", "asc")
-            </th>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].手機).ToHtmlString()
                , "Index"
                , routeNow, "Mobile", "asc")
-            </th>
-            <th>
-                @Html.SortActionLink(m=>Model.Sort,
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
                Html.DisplayNameFor(model => model.Contacts[0].電話).ToHtmlString()
                , "Index"
                , routeNow, "Phone", "asc")
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.Contacts)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CompanyNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.職稱)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.姓名)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.手機)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.電話)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+                </th>
+                <th></th>
             </tr>
+
+            @foreach (var item in Model.Contacts)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompanyNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.職稱)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.姓名)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.手機)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.電話)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        using (Html.BeginForm("BatchEdit", "CustomerContacts", FormMethod.Post, null))
+        {
+            @Html.AntiForgeryToken()
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+                <i class="material-icons right">save</i>
+                批次存檔
+            </button>
+            <table class="striped highlight">
+                <tr>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber).ToHtmlString()
+               , "Index"
+               , routeNow, "CompanyNumber", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CustomerName).ToHtmlString()
+               , "Index"
+               , routeNow, "CustomerName", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].職稱).ToHtmlString()
+               , "Index"
+               , routeNow, "JobName", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].姓名).ToHtmlString()
+               , "Index"
+               , routeNow, "ContactName", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].Email).ToHtmlString()
+               , "Index"
+               , routeNow, "Email", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].手機).ToHtmlString()
+               , "Index"
+               , routeNow, "Mobile", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].電話).ToHtmlString()
+               , "Index"
+               , routeNow, "Phone", "asc")
+                    </th>
+                </tr>
+
+                @for (var i=0;i< Model.Contacts.Count; i++)
+                {
+                    var list = Model.Contacts;
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(modelItem => list[i].Id)
+                            @Html.DisplayFor(modelItem => list[i].CompanyNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => list[i].CustomerName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => list[i].職稱)
+                            @Html.ValidationMessageFor(model => list[i].職稱, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => list[i].姓名)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => list[i].Email)
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => list[i].手機)
+                            @Html.ValidationMessageFor(model => list[i].手機, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => list[i].電話)
+                            @Html.ValidationMessageFor(model => list[i].電話, "", new { @class = "red-text" })
+                        </td>
+                    </tr>
+                }
+            </table>
+
         }
 
-    </table>
+    }
+
 }

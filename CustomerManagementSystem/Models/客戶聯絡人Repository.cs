@@ -39,14 +39,14 @@ namespace CustomerManagementSystem.Models
             return query;
         }
 
-        public List<CustometContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging,SortingViewModel sort)
+        public List<CustomerContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging,SortingViewModel sort)
         {
             return this.GetSearchIQuerable(cond)
                 .Sort(sort)
                 .Skip(paging.Skip)
                 .Take(paging.Take)
                 .AsNoTracking()
-                .Select(x=>new CustometContactViewModel() {
+                .Select(x=>new CustomerContactViewModel() {
                 CompanyNumber=x.客戶資料.統一編號,
                 CustomerName=x.客戶資料.客戶名稱,
                 Email=x.Email,
@@ -58,9 +58,9 @@ namespace CustomerManagementSystem.Models
             }).ToList();
         }
 
-        public List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond)
+        public List<CustomerContactViewModel> SearchAll(CustomerContactQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).AsNoTracking().Select(x => new CustometContactViewModel()
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).AsNoTracking().Select(x => new CustomerContactViewModel()
             {
                 CompanyNumber = x.客戶資料.統一編號,
                 CustomerName = x.客戶資料.客戶名稱,
@@ -86,9 +86,9 @@ namespace CustomerManagementSystem.Models
         /// <summary> 取得客戶底下所有聯絡人 </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public List<CustometContactViewModel> GetListByCustomerId(int id)
+        public List<CustomerContactViewModel> GetListByCustomerId(int id)
         {
-            return this.All().Where(x => x.客戶Id == id).Select(x => new CustometContactViewModel
+            return this.All().Where(x => x.客戶Id == id).Select(x => new CustomerContactViewModel
             {
                 CompanyNumber=x.客戶資料.統一編號,
                 CustomerName=x.客戶資料.客戶名稱,
@@ -100,16 +100,32 @@ namespace CustomerManagementSystem.Models
                 電話 =x.電話
             }).ToList();
         }
+
+        public void BatchUpdate(List<CustomerContactViewModel> list)
+        {
+            foreach (var item in list)
+            {
+                var existData = this.GetContactById(item.Id);
+                if (existData == null)
+                {
+                    throw new Exception("找不到此客戶");
+                }
+                existData.職稱 = item.職稱;
+                existData.手機 = item.手機;
+                existData.電話 = item.電話;
+            }
+        }
     }
 
 	public interface I客戶聯絡人Repository : IRepository<客戶聯絡人>
 	{
         客戶聯絡人 GetContactById(int id);
         IQueryable<客戶聯絡人> GetSearchIQuerable(CustomerContactQueryCondition cond);
-        List<CustometContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging, SortingViewModel sort);
-        List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond);
+        List<CustomerContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging, SortingViewModel sort);
+        List<CustomerContactViewModel> SearchAll(CustomerContactQueryCondition cond);
         int SearchCount(CustomerContactQueryCondition cond);
         bool IsEmailExist(string email, int customerId);
-        List<CustometContactViewModel> GetListByCustomerId(int id);
+        List<CustomerContactViewModel> GetListByCustomerId(int id);
+        void BatchUpdate(List<CustomerContactViewModel> list);
     }
 }

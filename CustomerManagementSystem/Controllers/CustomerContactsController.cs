@@ -33,6 +33,7 @@ namespace CustomerManagementSystem.Controllers
             result.Paging.Skip = data.Paging.Skip;
             result.Paging.Take = data.Paging.Take;
             result.Query = data.Query;
+            result.BatchEdit = data.BatchEdit;
             return View(result);
         }
 
@@ -49,7 +50,7 @@ namespace CustomerManagementSystem.Controllers
 
         private XLWorkbook GetExcelFile(CustomerContactsQueryViewModel cond = null)
         {
-            List<CustometContactViewModel> list = ContactsRepo.SearchAll(cond.Query); ;
+            List<CustomerContactViewModel> list = ContactsRepo.SearchAll(cond.Query); ;
             return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
@@ -152,6 +153,26 @@ namespace CustomerManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult BatchEdit(List<CustomerContactViewModel> list)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+            try
+            {
+                ContactsRepo.BatchUpdate(list);
+                ContactsRepo.UnitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex);
+            }
+            return RedirectToAction("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
