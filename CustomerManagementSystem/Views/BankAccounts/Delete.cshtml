@@ -3,8 +3,18 @@
 @{
     ViewBag.Title = "Delete";
 }
-
-<h2>Delete</h2>
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("刪除客戶銀行帳戶", "Delete", "BankAccounts", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
+<h2>刪除客戶銀行帳戶</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>

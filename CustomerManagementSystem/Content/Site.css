@@ -8476,3 +8476,7 @@ table{
     margin-top:17px;
     margin-bottom:17px;
 }
+
+nav.breadcrumb > .nav-wrapper{
+    padding-left:0.5rem;
+}

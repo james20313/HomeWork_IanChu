@@ -3,7 +3,16 @@
 @{
     ViewBag.Title = "客戶─聯絡人數─銀行帳戶數報表";
 }
-
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶─聯絡人數─銀行帳戶數報表", "Index", "CustomerReport", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
 <h2>客戶─聯絡人數─銀行帳戶數報表</h2>
 @using (Html.BeginForm("GetExcel", "CustomerReport", FormMethod.Post, null))
 {
