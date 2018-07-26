@@ -11,6 +11,7 @@ using CustomerManagementSystem.ViewModels;
 using ClosedXML.Excel;
 using WebApplication1.Models;
 using ClosedXML.Extensions;
+using CustomerManagementSystem.Models.Exceptions;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -91,17 +92,18 @@ namespace CustomerManagementSystem.Controllers
             return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
-        // GET: Customers/Details/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id.Value);
             if (客戶資料 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             CustomerDetailViewModel vm = new CustomerDetailViewModel()
             {
@@ -160,17 +162,18 @@ namespace CustomerManagementSystem.Controllers
             return View(vm);
         }
 
-        // GET: Customers/Edit/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id.Value);
             if (客戶資料 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
 
             return View(InitCustomerEditViewModel(客戶資料));
@@ -193,17 +196,18 @@ namespace CustomerManagementSystem.Controllers
             return View(vm);
         }
 
-        // GET: Customers/Delete/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id.Value);
             if (客戶資料 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             CustomerDetailViewModel vm = new CustomerDetailViewModel()
             {

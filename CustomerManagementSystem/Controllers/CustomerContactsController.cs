@@ -11,6 +11,7 @@ using CustomerManagementSystem.ViewModels;
 using ClosedXML.Excel;
 using WebApplication1.Models;
 using ClosedXML.Extensions;
+using CustomerManagementSystem.Models.Exceptions;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -54,17 +55,18 @@ namespace CustomerManagementSystem.Controllers
             return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
-        // GET: CustomerContacts/Details/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶聯絡人 客戶聯絡人 = ContactsRepo.GetContactById(id.Value);
             if (客戶聯絡人 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             return View(客戶聯絡人);
         }
@@ -95,16 +97,18 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: CustomerContacts/Edit/5
+        [HandleError(ExceptionType =typeof(DataNotFoundException),View ="Error")]
+        [HandleError(ExceptionType =typeof(NoPrimaryKeyPassException),View ="Error")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶聯絡人 客戶聯絡人 = ContactsRepo.GetContactById(id.Value);
             if (客戶聯絡人 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             ViewBag.客戶Id = new SelectList(CustomerRepo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
@@ -127,17 +131,18 @@ namespace CustomerManagementSystem.Controllers
             return View(客戶聯絡人);
         }
 
-        // GET: CustomerContacts/Delete/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶聯絡人 客戶聯絡人 = ContactsRepo.GetContactById(id.Value);
             if (客戶聯絡人 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             return View(客戶聯絡人);
         }

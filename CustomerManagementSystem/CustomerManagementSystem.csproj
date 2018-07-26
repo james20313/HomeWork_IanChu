@@ -225,6 +225,8 @@
     <Compile Include="Models\EFUnitOfWork.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Exceptions\DataNotFoundException.cs" />
+    <Compile Include="Models\Exceptions\NoPrimaryKeyPassException.cs" />
     <Compile Include="Models\Extensions\客戶聯絡人RepositoryExtension.cs" />
     <Compile Include="Models\Extensions\客戶資料RepositoryExtension.cs" />
     <Compile Include="Models\IdentityModels.cs" />
