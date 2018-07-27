@@ -1,0 +1,7 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+@Model
+<a href="https://www.google.com.tw/maps/search/@Model" target="_blank"><i class="material-icons">place</i>在Google Map檢視</a>
+}

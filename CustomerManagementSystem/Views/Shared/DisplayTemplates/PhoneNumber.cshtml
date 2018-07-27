@@ -1,0 +1,8 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    <a href="tel:@Model">
+        <i class="material-icons">local_phone</i>@Model
+    </a>
+}

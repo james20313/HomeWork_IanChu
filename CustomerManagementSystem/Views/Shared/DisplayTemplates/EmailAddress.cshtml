@@ -1,0 +1,9 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    <a href="mailto:@Model">
+        <i class="material-icons">email</i>@Model
+    </a>
+}
+
