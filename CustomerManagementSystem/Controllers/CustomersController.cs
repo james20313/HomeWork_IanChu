@@ -12,6 +12,7 @@ using ClosedXML.Excel;
 using WebApplication1.Models;
 using ClosedXML.Extensions;
 using CustomerManagementSystem.Models.Exceptions;
+using X.PagedList;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -37,7 +38,7 @@ namespace CustomerManagementSystem.Controllers
                 result.Sort.Column = "Id";
                 result.Sort.Sort = "desc";
             }
-            result.Customers = CustomerRepo.Search(cond.Query, cond.Paging, cond.Sort).Select(x => new CustomersViewModel()
+            var customerList = CustomerRepo.Search(cond.Query, cond.Paging, cond.Sort).Select(x => new CustomersViewModel()
             {
                 Address = x.地址,
                 ClientName = x.客戶名稱,
@@ -47,7 +48,9 @@ namespace CustomerManagementSystem.Controllers
                 Fax = x.傳真,
                 Phone = x.電話,
                 Id = x.Id
-            }).ToList();
+            });
+            result.Paging.Count = CustomerRepo.SearchCount(cond.Query);
+            result.Customers = new StaticPagedList<CustomersViewModel>(customerList,cond.Paging.Page,cond.Paging.Take, result.Paging.Count);
             result.CustomerTypeList = CustomerTypeRepo.All().ToList().Select(x => new SelectListItem()
             {
                 Text = x.類別名稱,
@@ -58,8 +61,6 @@ namespace CustomerManagementSystem.Controllers
                                : false
                            : false
             }).ToList();
-            result.Paging.Count = CustomerRepo.SearchCount(cond.Query);
-            result.Paging.Skip = cond.Paging.Skip;
             result.Paging.Take = cond.Paging.Take;
             result.Query = cond.Query;
             return View(result);

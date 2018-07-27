@@ -8480,3 +8480,12 @@ table{
 nav.breadcrumb > .nav-wrapper{
     padding-left:0.5rem;
 }
+
+/*paging*/
+.pagination li {
+    padding: .2em .6em;
+}
+.pagination li.active {
+    font-weight: 700;
+    font-size: 1.2rem;
+}

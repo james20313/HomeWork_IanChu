@@ -40,7 +40,6 @@ namespace CustomerManagementSystem.Controllers
             BankAccountQueryViewModel result = new BankAccountQueryViewModel();
             result.BankAccounts = BankAccountsRepo.Search(data.Query, data.Paging);
             result.Paging.Count = BankAccountsRepo.SearchCount(data.Query);
-            result.Paging.Skip = data.Paging.Skip;
             result.Paging.Take = data.Paging.Take;
             result.Query = data.Query;
             return View(result);

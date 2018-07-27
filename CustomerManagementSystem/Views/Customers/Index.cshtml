@@ -1,5 +1,7 @@
 ﻿@model CustomerManagementSystem.ViewModels.CustomersQueryViewModel
 @using CustomerManagementSystem.Helpers;
+@using X.PagedList.Mvc;
+@using X.PagedList;
 @{
     ViewBag.Title = "客戶資料管理";
 
@@ -77,46 +79,46 @@
     <table class="striped highlight">
         <tr>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].ClientName).ToHtmlString()
-               , "Index"
-               , routeNow, "ClientName", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].ClientName).ToHtmlString()
+    , "Index"
+    , routeNow, "ClientName", "asc")
             </th>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].CompanyNumber).ToHtmlString()
-               , "Index"
-               , routeNow, "CompanyNumber", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].CompanyNumber).ToHtmlString()
+    , "Index"
+    , routeNow, "CompanyNumber", "asc")
             </th>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].CustomerTypeName).ToHtmlString()
-               , "Index"
-               , routeNow, "CustomerTypeName", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].CustomerTypeName).ToHtmlString()
+    , "Index"
+    , routeNow, "CustomerTypeName", "asc")
             </th>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].Phone).ToHtmlString()
-               , "Index"
-               , routeNow, "Phone", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].Phone).ToHtmlString()
+    , "Index"
+    , routeNow, "Phone", "asc")
             </th>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].Fax).ToHtmlString()
-               , "Index"
-               , routeNow, "Fax", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].Fax).ToHtmlString()
+    , "Index"
+    , routeNow, "Fax", "asc")
             </th>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].Address).ToHtmlString()
-               , "Index"
-               , routeNow, "Address", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].Address).ToHtmlString()
+    , "Index"
+    , routeNow, "Address", "asc")
             </th>
             <th>
-                @Html.SortActionLink(m=>Model.Sort,
-               Html.DisplayNameFor(model => model.Customers[0].Email).ToHtmlString()
-               , "Index"
-               , routeNow, "Email", "asc")
+                @Html.SortActionLink(m => Model.Sort,
+    Html.DisplayNameFor(model => model.Customers[0].Email).ToHtmlString()
+    , "Index"
+    , routeNow, "Email", "asc")
             </th>
             <th></th>
         </tr>
@@ -154,5 +156,10 @@
         }
 
     </table>
+    @Html.PagedListPager(Model.Customers, page => {
+    //修改routeNow的Page為傳入的page
+    routeNow["Paging.Page"] = page;
+    return Url.Action("Index", routeNow);
+})
 }
 
