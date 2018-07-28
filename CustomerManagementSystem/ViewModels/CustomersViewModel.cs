@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -20,15 +21,18 @@ namespace CustomerManagementSystem.ViewModels
         public string CustomerTypeName { get; set; }
 
         [DisplayName("電話")]
+        [UIHint("PhoneNumber")]
         public string Phone { get; set; }
 
         [DisplayName("傳真")]
         public string Fax { get; set; }
 
         [DisplayName("地址")]
+        [UIHint("GoogleMapLinkAddress")]
         public string Address { get; set; }
 
         [DisplayName("Email")]
+        [UIHint("EmailAddress")]
         public string Email { get; set; }
     }
 }

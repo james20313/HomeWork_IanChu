@@ -142,6 +142,14 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="X.PagedList, Version=7.5.0.0, Culture=neutral, PublicKeyToken=00b6c4f97602e5e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\X.PagedList.7.5.0\lib\net461\X.PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="X.PagedList.Mvc, Version=7.5.0.0, Culture=neutral, PublicKeyToken=c6e0b5b21f916f4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\X.PagedList.Mvc.7.5.0\lib\net461\X.PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -213,6 +221,7 @@
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attribute\CellphoneNumberAttribute.cs" />
+    <Compile Include="Models\Attribute\OutputActionSpendTimeAttribute.cs" />
     <Compile Include="Models\Attribute\TaiwanCompanyNumberAttribute.cs" />
     <Compile Include="Models\EFGeneratePartialClass.cs">
       <AutoGen>True</AutoGen>
@@ -225,6 +234,10 @@
     <Compile Include="Models\EFUnitOfWork.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Exceptions\DataNotFoundException.cs" />
+    <Compile Include="Models\Exceptions\NoPrimaryKeyPassException.cs" />
+    <Compile Include="Models\Extensions\客戶聯絡人RepositoryExtension.cs" />
+    <Compile Include="Models\Extensions\客戶資料RepositoryExtension.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IRepository.cs">
       <AutoGen>True</AutoGen>
@@ -237,6 +250,11 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Services\AuthorizationService.cs" />
+    <Compile Include="Models\Services\LoginService.cs" />
+    <Compile Include="Models\客戶聯絡人.Partial.cs">
+      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶資料.Partial.cs">
       <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
@@ -257,13 +275,11 @@
     <Compile Include="ViewModels\CustomerContactsQueryViewModel.cs" />
     <Compile Include="ViewModels\CustomerDetailViewModel.cs" />
     <Compile Include="ViewModels\CustomerEditViewModel.cs" />
+    <Compile Include="ViewModels\CustomerOnlyEditViewModel.cs" />
     <Compile Include="ViewModels\CustomerReportViewModel.cs" />
     <Compile Include="ViewModels\CustomersQueryViewModel.cs" />
     <Compile Include="Models\客戶聯絡人.cs">
       <DependentUpon>客戶資料Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\客戶聯絡人.Partial.cs">
-      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶聯絡人Repository.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
@@ -303,11 +319,18 @@
     <Compile Include="ViewModels\CustomerQueryInModel.cs" />
     <Compile Include="ViewModels\CustomersViewModel.cs" />
     <Compile Include="ViewModels\CustometContactViewModel.cs" />
+    <Compile Include="ViewModels\CustomerLoginViewModel.cs" />
     <Compile Include="ViewModels\PagingViewModel.cs" />
+    <Compile Include="ViewModels\SortingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\avatar\avatar-7.png" />
+    <Content Include="Content\images\gallary\12.png" />
+    <Content Include="Content\images\logo\materialize-logo.png" />
+    <Content Include="Content\materialize.css" />
+    <Content Include="Content\materialize.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -339,6 +362,12 @@
     <Content Include="Models\客戶資料Model.edmx.diagram">
       <DependentUpon>客戶資料Model.edmx</DependentUpon>
     </Content>
+    <Content Include="fonts\material-design-icons\MaterialIcons-Regular.ttf" />
+    <Content Include="fonts\material-design-icons\MaterialIcons-Regular.woff" />
+    <Content Include="fonts\material-design-icons\MaterialIcons-Regular.woff2" />
+    <Content Include="fonts\roboto\Roboto-Bold.woff" />
+    <Content Include="fonts\roboto\Roboto-Bold.woff2" />
+    <Content Include="fonts\roboto\Roboto-Regular.woff2" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -347,6 +376,8 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\materialize.js" />
+    <Content Include="Scripts\materialize.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -401,6 +432,12 @@
     <Content Include="Views\BankAccounts\Edit.cshtml" />
     <Content Include="Views\BankAccounts\Index.cshtml" />
     <Content Include="Views\CustomerReport\Index.cshtml" />
+    <Content Include="Views\Customers\_ContactList.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\PhoneNumber.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\EmailAddress.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\GoogleMapLinkAddress.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Customers\CustomerEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

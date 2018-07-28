@@ -45,7 +45,15 @@ namespace CustomerManagementSystem.Models
         [Required]
         [DisplayName("客戶類別")]
         public int 類別Id { get; set; }
-    
+
+        [Required]
+        [DisplayName("登入密碼")]
+        public string Password { get; set; }
+
+        [Required]
+        [DisplayName("登入帳號")]
+        public string Account { get; set; }
+
         public virtual 客戶類別 客戶類別 { get; set; }
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
         public virtual ICollection<客戶聯絡人> 客戶聯絡人 { get; set; }

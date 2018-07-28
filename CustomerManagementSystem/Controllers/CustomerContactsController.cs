@@ -11,9 +11,11 @@ using CustomerManagementSystem.ViewModels;
 using ClosedXML.Excel;
 using WebApplication1.Models;
 using ClosedXML.Extensions;
+using CustomerManagementSystem.Models.Exceptions;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [Authorize(Roles ="Manager")]
     public class CustomerContactsController : Controller
     {
         private I客戶聯絡人Repository ContactsRepo;
@@ -25,23 +27,14 @@ namespace CustomerManagementSystem.Controllers
             this.CustomerRepo = RepositoryHelper.Get客戶資料Repository(this.ContactsRepo.UnitOfWork);
         }
 
-        // GET: CustomerContacts
-        public ActionResult Index()
-        {
-            CustomerContactsQueryViewModel result = new CustomerContactsQueryViewModel();
-            result.Contacts = ContactsRepo.Search(result.Query, result.Paging);
-            return View(result);
-        }
-
-        [HttpPost]
         public ActionResult Index(CustomerContactsQueryViewModel data=null)
         {
             CustomerContactsQueryViewModel result = new CustomerContactsQueryViewModel();
-            result.Contacts = ContactsRepo.Search(data.Query, data.Paging);
+            result.Contacts = ContactsRepo.Search(data.Query, data.Paging, data.Sort);
             result.Paging.Count = ContactsRepo.SearchCount(data.Query);
-            result.Paging.Skip = data.Paging.Skip;
             result.Paging.Take = data.Paging.Take;
             result.Query = data.Query;
+            result.BatchEdit = data.BatchEdit;
             return View(result);
         }
 
@@ -58,21 +51,22 @@ namespace CustomerManagementSystem.Controllers
 
         private XLWorkbook GetExcelFile(CustomerContactsQueryViewModel cond = null)
         {
-            List<CustometContactViewModel> list = ContactsRepo.SearchAll(cond.Query); ;
+            List<CustomerContactViewModel> list = ContactsRepo.SearchAll(cond.Query); ;
             return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
-        // GET: CustomerContacts/Details/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶聯絡人 客戶聯絡人 = ContactsRepo.GetContactById(id.Value);
             if (客戶聯絡人 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             return View(客戶聯絡人);
         }
@@ -103,16 +97,18 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: CustomerContacts/Edit/5
+        [HandleError(ExceptionType =typeof(DataNotFoundException),View ="Error")]
+        [HandleError(ExceptionType =typeof(NoPrimaryKeyPassException),View ="Error")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶聯絡人 客戶聯絡人 = ContactsRepo.GetContactById(id.Value);
             if (客戶聯絡人 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             ViewBag.客戶Id = new SelectList(CustomerRepo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
@@ -135,17 +131,18 @@ namespace CustomerManagementSystem.Controllers
             return View(客戶聯絡人);
         }
 
-        // GET: CustomerContacts/Delete/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶聯絡人 客戶聯絡人 = ContactsRepo.GetContactById(id.Value);
             if (客戶聯絡人 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             return View(客戶聯絡人);
         }
@@ -161,6 +158,26 @@ namespace CustomerManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult BatchEdit(List<CustomerContactViewModel> list)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+            try
+            {
+                ContactsRepo.BatchUpdate(list);
+                ContactsRepo.UnitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex);
+            }
+            return RedirectToAction("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace CustomerManagementSystem.ViewModels
 {
-    public class CustometContactViewModel
+    public class CustomerContactViewModel
     {
         public int Id { get; set; }
 
@@ -23,12 +24,15 @@ namespace CustomerManagementSystem.ViewModels
         public string 姓名 { get; set; }
 
         [DisplayName("Email")]
+        [UIHint("EmailAddress")]
         public string Email { get; set; }
 
         [DisplayName("手機")]
+        [UIHint("PhoneNumber")]
         public string 手機 { get; set; }
 
         [DisplayName("電話")]
+        [UIHint("PhoneNumber")]
         public string 電話 { get; set; }
     }
 }

@@ -8,6 +8,9 @@
     [Email]     NVARCHAR (250) NULL,
     [IsDeleted] BIT            CONSTRAINT [DF_客戶資料_IsDeleted] DEFAULT ((0)) NOT NULL,
     [類別Id] INT NOT NULL, 
+    [Password] NVARCHAR(MAX) NULL, 
+    [Salt] NVARCHAR(MAX) NULL, 
+    [Account] NVARCHAR(25) NULL, 
     CONSTRAINT [PK_dbo.Customers] PRIMARY KEY CLUSTERED ([Id] ASC), 
     CONSTRAINT [FK_客戶資料_客戶類別] FOREIGN KEY ([類別Id]) REFERENCES [客戶類別]([Id])
 );

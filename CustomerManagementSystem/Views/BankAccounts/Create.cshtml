@@ -3,8 +3,18 @@
 @{
     ViewBag.Title = "Create";
 }
-
-<h2>Create</h2>
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("新增客戶銀行帳戶", "Create", "BankAccounts", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
+<h2>新增客戶銀行帳戶</h2>
 
 
 @using (Html.BeginForm()) 

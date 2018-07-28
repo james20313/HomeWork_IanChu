@@ -11,6 +11,7 @@ using WebApplication1.Models;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [Authorize(Roles ="Manager")]
     public class CustomerReportController : Controller
     {
         private I客戶資料Repository CustomerRepo;

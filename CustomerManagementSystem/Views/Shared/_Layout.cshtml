@@ -1,46 +1,228 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - MVC開發實戰 Week1 Homework</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/materialize.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("MVC開發實戰 Week1 Homework", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("客戶資料管理", "Index", "Customers")</li>
-                    <li>@Html.ActionLink("客戶聯絡人管理", "Index", "CustomerContacts")</li>
-                    <li>@Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts")</li>
-                    <li>@Html.ActionLink("客戶─聯絡人數─銀行帳戶數報表", "Index", "CustomerReport")</li>
+    <!-- Start Page Loading -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+    <!-- End Page Loading -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START HEADER -->
+    <header id="header" class="page-topbar">
+        <!-- start header nav-->
+        <div class="navbar-fixed">
+            <nav class="navbar-color">
+                <div class="nav-wrapper">
+                    <ul class="left">
+                        <li>
+                            <h1 class="logo-wrapper">
+                                <a href="@Url.Action("Index","Home")" class="brand-logo darken-1">
+                                    <img src="~/Content/images/logo/materialize-logo.png" alt="materialize logo" />
+                                    <span class="logo-text hide-on-med-and-down">MVC開發實戰 Homework</span>
+                                </a>
+                            </h1>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- end header nav-->
+    </header>
+    <!-- END HEADER -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START MAIN -->
+    <div id="main">
+        <!-- START WRAPPER -->
+        <div class="wrapper">
+            <!-- START LEFT SIDEBAR NAV-->
+            <aside id="left-sidebar-nav">
+                <ul id="slide-out" class="side-nav fixed leftside-navigation">
+                    <li class="user-details cyan darken-2">
+                        <div class="row">
+                            <div class="col col s4 m4 l4">
+                                <img src="~/Content/images/avatar/avatar-7.png" alt="" class="circle responsive-img valign profile-image cyan" />
+                            </div>
+                            <div class="col col s8 m8 l8">
+                                <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown-nav">John Doe<i class="mdi-navigation-arrow-drop-down right"></i></a>
+                                <p class="user-roal">Administrator</p>
+                                <a href="@Url.Action("LogOut","Home")" class="white-text text-darken-1">
+                                    <i class="material-icons">keyboard_tab</i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="no-padding">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","Customers")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">people</i>
+                                        <span class="nav-text">客戶資料管理</span>
+                                    </a>
+                                </li>
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","CustomerContacts")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">contact_mail</i>
+                                        <span class="nav-text">客戶聯絡人管理</span>
+                                    </a>
+                                </li>
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","BankAccounts")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">account_balance</i>
+                                        <span class="nav-text">客戶銀行帳戶管理</span>
+                                    </a>
+                                </li>
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","CustomerReport")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">insert_chart</i>
+                                        <span class="nav-text">客戶報表</span>
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Customer"))
+                            {
+                                <li class="bold">
+                                    <a href="@Url.Action("CustomerEdit","Customer")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">people</i>
+                                        <span class="nav-text">修改客戶資料</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
                 </ul>
+                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only">
+                    <i class="material-icons">menu</i>
+                </a>
+            </aside>
+            <!-- END LEFT SIDEBAR NAV-->
+            <!-- //////////////////////////////////////////////////////////////////////////// -->
+            <!-- START CONTENT -->
+            <section id="content">
+                @RenderSection("breadcrumb",false)
+                <!--start container-->
+                <div class="container">
+                    @RenderBody()
+                </div>
+                <!--end container-->
+            </section>
+            <!-- END CONTENT -->
+        </div>
+        <!-- END WRAPPER -->
+    </div>
+    <!-- END MAIN -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START FOOTER -->
+    <footer class="page-footer">
+        <div class="page-footer">
+            <div class="footer-copyright">
+                <div class="container">
+                    <span>
+                        Copyright ©
+                        <a class="grey-text text-lighten-2" href="http://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" target="_blank">PIXINVENT</a> All rights reserved.
+                    </span>
+                    <span class="right hide-on-small-only"> Design and Developed by <a class="grey-text text-lighten-2" href="https://pixinvent.com/">PIXINVENT</a></span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 應用程式</p>
-        </footer>
-    </div>
-
+    </footer>
+    <!-- END FOOTER -->
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/materialize.js"></script>
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            setTimeout(function () {
+                $('body').addClass('loaded');
+            }, 200);
+        });
+        $(document).ready(function () {
+            var window_width = $(window).width();
+            var openIndex;
+
+            // Collapsible navigation menu
+            $('.nav-collapsible .navbar-toggler').click(function () {
+                //set Index velue
+                getCollapseIndex();
+                // Toggle navigation expan and collapse on radio click
+                if ($('#left-sidebar-nav').hasClass('nav-expanded') && !$('#left-sidebar-nav').hasClass('nav-lock')) {
+                    $('#left-sidebar-nav').toggleClass('nav-expanded');
+                    $('#main').toggleClass('main-full');
+                } else {
+                    $('#left-sidebar-nav').toggleClass('nav-expanded nav-collapsed');
+                    $('#main').toggleClass('main-full');
+                }
+                // Set navigation lock / unlock with radio icon
+                if ($(this).children().text() == 'radio_button_unchecked') {
+                    $(this).children().text('radio_button_checked');
+                    $('#left-sidebar-nav').addClass('nav-lock');
+                    $('.header-search-wrapper').addClass('sideNav-lock');
+                } else {
+                    $(this).children().text('radio_button_unchecked');
+                    $('#left-sidebar-nav').removeClass('nav-lock');
+                    $('.header-search-wrapper').removeClass('sideNav-lock');
+                }
+
+                setTimeout(function () {
+                    if (openIndex != null) {
+                        if ($('#left-sidebar-nav').hasClass('nav-collapsed')) {
+                            $('.collapsible').collapsible('close', (openIndex));
+                        }
+                    }
+                }, 100);
+            });
+
+            // Expand navigation on mouseenter event
+            $('#left-sidebar-nav.nav-collapsible').mouseenter(function () {
+                //set Index velue
+                getCollapseIndex();
+
+                if (!$(this).hasClass('nav-lock')) {
+                    $(this).addClass('nav-expanded').removeClass('nav-collapsed');
+                    setTimeout(function () {
+                        $('.collapsible').collapsible('open', (openIndex));
+                    }, 100);
+                }
+            });
+
+            // Collapse navigation on mouseleave event
+            $('#left-sidebar-nav.nav-collapsible').mouseleave(function () {
+                //set Index velue
+                getCollapseIndex();
+                if (!$(this).hasClass('nav-lock')) {
+                    $(this).addClass('nav-collapsed').removeClass('nav-expanded');
+                    setTimeout(function () {
+                        $('.collapsible').collapsible('close', (openIndex));
+                    }, 100);
+                }
+            });
+
+            function getCollapseIndex() {
+                $("#slide-out > li > ul > li > a.collapsible-header").each(function (index) {
+                    if ($(this).parent().hasClass('active')) {
+                        openIndex = index;
+                    }
+                });
+            }
+
+            //Main Left Sidebar Menu
+            $('.sidebar-collapse').sidenav({
+                edge: 'left', // Choose the horizontal origin
+            });
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

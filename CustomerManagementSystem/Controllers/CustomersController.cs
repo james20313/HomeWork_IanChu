@@ -11,51 +11,38 @@ using CustomerManagementSystem.ViewModels;
 using ClosedXML.Excel;
 using WebApplication1.Models;
 using ClosedXML.Extensions;
+using CustomerManagementSystem.Models.Exceptions;
+using X.PagedList;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [Authorize]
     public class CustomersController : Controller
     {
         private I客戶資料Repository CustomerRepo;
         private I客戶類別Repository CustomerTypeRepo;
+        private I客戶聯絡人Repository ContactsRepo;
 
         public CustomersController()
         {
             this.CustomerRepo = RepositoryHelper.Get客戶資料Repository();
-            this.CustomerTypeRepo = RepositoryHelper.Get客戶類別Repository();
+            this.CustomerTypeRepo = RepositoryHelper.Get客戶類別Repository(this.CustomerRepo.UnitOfWork);
+            this.ContactsRepo = RepositoryHelper.Get客戶聯絡人Repository(this.CustomerRepo.UnitOfWork);
         }
-        // GET: Customers
-        public ActionResult Index()
-        {
-            CustomersQueryViewModel result = new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(result.Query, result.Paging).Select(x => new CustomersViewModel()
-            {
-                Address = x.地址,
-                ClientName = x.客戶名稱,
-                CompanyNumber = x.統一編號,
-                CustomerTypeName = x.客戶類別.類別名稱,
-                Email = x.Email,
-                Fax = x.傳真,
-                Phone = x.電話,
-                Id = x.Id
-            }).ToList();
-            result.CustomerTypeList = CustomerTypeRepo.All().Select(x => new SelectListItem()
-            {
-                Text = x.類別名稱,
-                Value = x.Id.ToString(),
-                Selected = x.Id == 0 ? true : false
-            }).ToList();
-            result.Paging.Count = CustomerRepo.SearchCount(result.Query);
-            result.Paging.Skip = result.Paging.Skip;
-            result.Paging.Take = result.Paging.Take;
-            return View(result);
-        }
-
-        [HttpPost]
+        
+        [Authorize(Roles ="Manager")]
         public ActionResult Index(CustomersQueryViewModel cond = null)
         {
             CustomersQueryViewModel result = new CustomersQueryViewModel();
-            result.Customers = CustomerRepo.Search(cond.Query, cond.Paging).Select(x => new CustomersViewModel()
+            if (cond == null)
+            {
+                //預設排序
+                result.Sort.Column = "Id";
+                result.Sort.Sort = "desc";
+            }
+            var customerList = CustomerRepo.Search(cond.Query, cond.Paging, cond.Sort).Select(x => new CustomersViewModel()
             {
                 Address = x.地址,
                 ClientName = x.客戶名稱,
@@ -65,7 +52,9 @@ namespace CustomerManagementSystem.Controllers
                 Fax = x.傳真,
                 Phone = x.電話,
                 Id = x.Id
-            }).ToList();
+            });
+            result.Paging.Count = CustomerRepo.SearchCount(cond.Query);
+            result.Customers = new StaticPagedList<CustomersViewModel>(customerList,cond.Paging.Page,cond.Paging.Take, result.Paging.Count);
             result.CustomerTypeList = CustomerTypeRepo.All().ToList().Select(x => new SelectListItem()
             {
                 Text = x.類別名稱,
@@ -76,14 +65,13 @@ namespace CustomerManagementSystem.Controllers
                                : false
                            : false
             }).ToList();
-            result.Paging.Count = CustomerRepo.SearchCount(cond.Query);
-            result.Paging.Skip = cond.Paging.Skip;
             result.Paging.Take = cond.Paging.Take;
             result.Query = cond.Query;
             return View(result);
         }
 
         [HttpPost]
+        [Authorize(Roles ="Manager")]
         public ActionResult GetExcel(CustomersQueryViewModel cond = null)
         {
             
@@ -94,9 +82,10 @@ namespace CustomerManagementSystem.Controllers
             }
         }
 
+        [Authorize(Roles ="Manager")]
         private XLWorkbook GetExcelFile(CustomersQueryViewModel cond = null)
         {
-            List<CustomersViewModel> list= CustomerRepo.Search(cond.Query, cond.Paging).Select(x => new CustomersViewModel()
+            List<CustomersViewModel> list= CustomerRepo.Search(cond.Query, cond.Paging, cond.Sort).Select(x => new CustomersViewModel()
             {
                 Address = x.地址,
                 ClientName = x.客戶名稱,
@@ -110,17 +99,19 @@ namespace CustomerManagementSystem.Controllers
             return ClosedXmlHelper.ToClosedXmlExcel(list);
         }
 
-        // GET: Customers/Details/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
+        [Authorize(Roles ="Manager")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id.Value);
             if (客戶資料 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             CustomerDetailViewModel vm = new CustomerDetailViewModel()
             {
@@ -136,6 +127,7 @@ namespace CustomerManagementSystem.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles ="Manager")]
         private CustomerEditViewModel InitCustomerEditViewModel(客戶資料 existData = null)
         {
             var initData = new CustomerEditViewModel()
@@ -156,6 +148,7 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: Customers/Create
+        [Authorize(Roles ="Manager")]
         public ActionResult Create()
         {
             return View(InitCustomerEditViewModel());
@@ -166,10 +159,18 @@ namespace CustomerManagementSystem.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Manager")]
         public ActionResult Create(CustomerEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                //密碼加密
+                string salt = Guid.NewGuid().ToString();
+                byte[] pwdAndSalt = Encoding.UTF8.GetBytes(vm.Customer.Password + salt);
+                byte[] hashBytes = new SHA256Managed().ComputeHash(pwdAndSalt);
+                string hash = Convert.ToBase64String(hashBytes);
+                vm.Customer.Password = hash;
+
                 客戶資料 newData = vm.Customer;
                 CustomerRepo.Add(newData);
                 CustomerRepo.UnitOfWork.Commit();
@@ -179,17 +180,19 @@ namespace CustomerManagementSystem.Controllers
             return View(vm);
         }
 
-        // GET: Customers/Edit/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
+        [Authorize(Roles ="Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id.Value);
             if (客戶資料 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
 
             return View(InitCustomerEditViewModel(客戶資料));
@@ -200,6 +203,7 @@ namespace CustomerManagementSystem.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Manager")]
         public ActionResult Edit(CustomerEditViewModel vm)
         {
             if (ModelState.IsValid)
@@ -212,17 +216,19 @@ namespace CustomerManagementSystem.Controllers
             return View(vm);
         }
 
-        // GET: Customers/Delete/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
+        [Authorize(Roles ="Manager")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id.Value);
             if (客戶資料 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             CustomerDetailViewModel vm = new CustomerDetailViewModel()
             {
@@ -241,6 +247,7 @@ namespace CustomerManagementSystem.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Manager")]
         public ActionResult DeleteConfirmed(int id)
         {
             客戶資料 客戶資料 = CustomerRepo.GetCustomerById(id);
@@ -250,11 +257,61 @@ namespace CustomerManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Manager")]
         public JsonResult GetCustomerAmount()
         {
             return Json(new {
                 Count=CustomerRepo.GetCustomerAmount()
             }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary> 取得客戶底下所有聯絡人 </summary>
+        /// <param name="id"></param>
+        /// <returns>部分檢視</returns>
+        [Authorize(Roles ="Manager")]
+        public ActionResult ListAllContacts(int id)
+        {
+            if (id == 0)
+                return new HttpNotFoundResult("請輸入客戶ID");
+
+            var list = this.ContactsRepo.GetListByCustomerId(id);
+            return PartialView("_ContactList", list);
+        }
+
+        [Authorize(Roles = "Customer")]
+        public ActionResult CustomerEdit()
+        {
+            //取得登入user的帳戶
+            var customerAccount = User.Identity.Name;
+            var customerData = this.CustomerRepo.All().Where(x => x.Account == customerAccount).Select(x=>new CustomerOnlyEditViewModel() {
+                Email=x.Email,
+                Id=x.Id,
+                傳真=x.傳真,
+                地址=x.地址,
+                客戶名稱=x.客戶名稱,
+                客戶類別=x.客戶類別.類別名稱,
+                統一編號=x.統一編號,
+                電話=x.電話
+            }).FirstOrDefault();
+            if (customerData != null)
+            {
+                return View(customerData);
+            }
+            return RedirectToAction("Login", "Home");
+        }
+
+        [Authorize(Roles = "Customer")]
+        [HttpPost]
+        public ActionResult CustomerEdit(CustomerOnlyEditViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                CustomerRepo.UpdateCustomerOnlyData(vm);
+                CustomerRepo.UnitOfWork.Commit();
+                return RedirectToAction("CustomerEdit");
+            }
+            return View(vm);
         }
 
         protected override void Dispose(bool disposing)

@@ -3,8 +3,18 @@
 @{
     ViewBag.Title = "Create";
 }
-
-<h2>Create</h2>
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶聯絡人管理", "Index", "CustomerContacts", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("建立客戶聯絡人", "Create", "CustomerContacts", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
+<h2>建立客戶聯絡人</h2>
 
 
 @using (Html.BeginForm()) 

@@ -1,9 +1,29 @@
 ﻿@model CustomerManagementSystem.ViewModels.CustomerContactsQueryViewModel
+@using CustomerManagementSystem.Helpers;
 
 @{
     ViewBag.Title = "客戶聯絡人管理";
-}
 
+    //準備ROUTE DICTIONARY DATA
+    var routeNow = Request.RequestContext.RouteData.Values;
+    foreach (var queryString in Request.QueryString.AllKeys)
+    {
+        if (routeNow[queryString] == null)
+        {
+            routeNow.Add(queryString, Request.QueryString[queryString]);
+        }
+    }
+}
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶聯絡人管理", "Index", "CustomerContacts", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
 <h2>客戶聯絡人管理</h2>
 
 <p>
@@ -12,102 +32,220 @@
 <div class="panel panel-default">
     <div class="panel-heading">客戶資料查詢</div>
     <div class="panel-body">
-        @using (Html.BeginForm("Index", "CustomerContacts", FormMethod.Post, null))
+        @using (Html.BeginForm("Index", "CustomerContacts", FormMethod.Get, null))
         {
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.CompanyNumber)</label>
-                @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CompanyNumber) })
+                @Html.TextBoxFor(model => Model.Query.CompanyNumber, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CompanyNumber), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.CustomerName)</label>
-                @Html.TextBoxFor(model => Model.Query.CustomerName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CustomerName) })
+                @Html.TextBoxFor(model => Model.Query.CustomerName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.CustomerName), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.ContactName)</label>
-                @Html.TextBoxFor(model => Model.Query.ContactName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.ContactName) })
+                @Html.TextBoxFor(model => Model.Query.ContactName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.ContactName), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Mobile)</label>
-                @Html.TextBoxFor(model => Model.Query.Mobile, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Mobile) })
+                @Html.TextBoxFor(model => Model.Query.Mobile, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Mobile), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Phone)</label>
-                @Html.TextBoxFor(model => Model.Query.Phone, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Phone) })
+                @Html.TextBoxFor(model => Model.Query.Phone, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Phone), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.JobName)</label>
-                @Html.TextBoxFor(model => Model.Query.JobName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.JobName) })
+                @Html.TextBoxFor(model => Model.Query.JobName, new { @placeholder = Html.DisplayNameFor(model => Model.Query.JobName), @class = "form-control" })
             </div>
-            <div>
+            <div class="form-group col-sm-12">
                 <label>@Html.DisplayNameFor(model => Model.Query.Email)</label>
-                @Html.TextBoxFor(model => Model.Query.Email, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Email) })
+                @Html.TextBoxFor(model => Model.Query.Email, new { @placeholder = Html.DisplayNameFor(model => Model.Query.Email), @class = "form-control" })
             </div>
             @Html.Hidden("Take", Model.Paging.Take)
             @Html.Hidden("Skip", Model.Paging.Skip)
             <button type="submit" class="btn btn-primary">查詢</button>
             <button type="submit" class="btn btn-info" formaction='@Url.Action("GetExcel")'>匯出Excel</button>
+            @Html.ActionLink("批次編輯", "Index", new { BatchEdit = true }, new { @class = "waves-effect waves-light btn" })
         }
     </div>
 </div>
+<br />
 @if (Model.Contacts.Any())
 {
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].CustomerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].職稱)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].姓名)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].手機)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contacts[0].電話)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.Contacts)
-        {
+    if (!Model.BatchEdit)
+    {
+        <table class="striped highlight">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CompanyNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.職稱)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.姓名)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.手機)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.電話)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber).ToHtmlString()
+               , "Index"
+               , routeNow, "CompanyNumber", "asc")
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CustomerName).ToHtmlString()
+               , "Index"
+               , routeNow, "CustomerName", "asc")
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].職稱).ToHtmlString()
+               , "Index"
+               , routeNow, "JobName", "asc")
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].姓名).ToHtmlString()
+               , "Index"
+               , routeNow, "ContactName", "asc")
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].Email).ToHtmlString()
+               , "Index"
+               , routeNow, "Email", "asc")
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].手機).ToHtmlString()
+               , "Index"
+               , routeNow, "Mobile", "asc")
+                </th>
+                <th>
+                    @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].電話).ToHtmlString()
+               , "Index"
+               , routeNow, "Phone", "asc")
+                </th>
+                <th></th>
             </tr>
+
+            @foreach (var item in Model.Contacts)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompanyNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.職稱)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.姓名)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.手機)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.電話)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        using (Html.BeginForm("BatchEdit", "CustomerContacts", FormMethod.Post, null))
+        {
+            @Html.AntiForgeryToken()
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+                <i class="material-icons right">save</i>
+                批次存檔
+            </button>
+            <table class="striped highlight">
+                <tr>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CompanyNumber).ToHtmlString()
+               , "Index"
+               , routeNow, "CompanyNumber", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].CustomerName).ToHtmlString()
+               , "Index"
+               , routeNow, "CustomerName", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].職稱).ToHtmlString()
+               , "Index"
+               , routeNow, "JobName", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].姓名).ToHtmlString()
+               , "Index"
+               , routeNow, "ContactName", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].Email).ToHtmlString()
+               , "Index"
+               , routeNow, "Email", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].手機).ToHtmlString()
+               , "Index"
+               , routeNow, "Mobile", "asc")
+                    </th>
+                    <th>
+                        @Html.SortActionLink(m => Model.Sort,
+               Html.DisplayNameFor(model => model.Contacts[0].電話).ToHtmlString()
+               , "Index"
+               , routeNow, "Phone", "asc")
+                    </th>
+                </tr>
+
+                @for (var i=0;i< Model.Contacts.Count; i++)
+                {
+                    var list = Model.Contacts;
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(modelItem => list[i].Id)
+                            @Html.DisplayFor(modelItem => list[i].CompanyNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => list[i].CustomerName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => list[i].職稱)
+                            @Html.ValidationMessageFor(model => list[i].職稱, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => list[i].姓名)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => list[i].Email)
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => list[i].手機)
+                            @Html.ValidationMessageFor(model => list[i].手機, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => list[i].電話)
+                            @Html.ValidationMessageFor(model => list[i].電話, "", new { @class = "red-text" })
+                        </td>
+                    </tr>
+                }
+            </table>
+
         }
 
-    </table>
+    }
+
 }

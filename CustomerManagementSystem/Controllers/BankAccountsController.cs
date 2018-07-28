@@ -11,9 +11,11 @@ using CustomerManagementSystem.ViewModels;
 using ClosedXML.Excel;
 using WebApplication1.Models;
 using ClosedXML.Extensions;
+using CustomerManagementSystem.Models.Exceptions;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [Authorize(Roles ="Manager")]
     public class BankAccountsController : Controller
     {
         private I客戶銀行資訊Repository BankAccountsRepo;
@@ -39,7 +41,6 @@ namespace CustomerManagementSystem.Controllers
             BankAccountQueryViewModel result = new BankAccountQueryViewModel();
             result.BankAccounts = BankAccountsRepo.Search(data.Query, data.Paging);
             result.Paging.Count = BankAccountsRepo.SearchCount(data.Query);
-            result.Paging.Skip = data.Paging.Skip;
             result.Paging.Take = data.Paging.Take;
             result.Query = data.Query;
             return View(result);
@@ -63,16 +64,18 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: BankAccounts/Details/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶銀行資訊 客戶銀行資訊 = BankAccountsRepo.GetBankAccountById(id.Value);
             if (客戶銀行資訊 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             return View(客戶銀行資訊);
         }
@@ -102,17 +105,18 @@ namespace CustomerManagementSystem.Controllers
             return View(客戶銀行資訊);
         }
 
-        // GET: BankAccounts/Edit/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶銀行資訊 客戶銀行資訊 = BankAccountsRepo.GetBankAccountById(id.Value);
             if (客戶銀行資訊 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             ViewBag.客戶Id = new SelectList(CustomerRepo.All(), "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
@@ -135,17 +139,18 @@ namespace CustomerManagementSystem.Controllers
             return View(客戶銀行資訊);
         }
 
-        // GET: BankAccounts/Delete/5
+        [HandleError(ExceptionType = typeof(DataNotFoundException), View = "Error")]
+        [HandleError(ExceptionType = typeof(NoPrimaryKeyPassException), View = "Error")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new NoPrimaryKeyPassException();
             }
             客戶銀行資訊 客戶銀行資訊 = BankAccountsRepo.GetBankAccountById(id.Value);
             if (客戶銀行資訊 == null)
             {
-                return HttpNotFound();
+                throw new DataNotFoundException();
             }
             return View(客戶銀行資訊);
         }

@@ -3,8 +3,18 @@
 @{
     ViewBag.Title = "Edit";
 }
-
-<h2>Edit</h2>
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶銀行帳戶管理", "Index", "BankAccounts", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("編輯客戶銀行帳戶", "Edit", "BankAccounts", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
+<h2>編輯客戶銀行帳戶</h2>
 
 
 @using (Html.BeginForm())

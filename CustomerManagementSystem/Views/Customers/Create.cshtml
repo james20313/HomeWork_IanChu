@@ -3,7 +3,17 @@
 @{
     ViewBag.Title = "Create";
 }
-
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶資料管理", "Index", "Customers", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("新增客戶資料", "Create", "Customers", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
 <h2>新增客戶資料</h2>
 
 

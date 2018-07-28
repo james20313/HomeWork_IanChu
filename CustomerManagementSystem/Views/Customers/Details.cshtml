@@ -3,7 +3,17 @@
 @{
     ViewBag.Title = "Details";
 }
-
+@section breadcrumb{
+    <nav class="breadcrumb">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶資料管理", "Index", "Customers", new { area = "" }, new { @class = "breadcrumb" })
+                @Html.ActionLink("客戶資料明細", "Details", "Customers", new { area = "" }, new { @class = "breadcrumb" })
+            </div>
+        </div>
+    </nav>
+}
 <h2>客戶資料明細</h2>
 
 <div>
@@ -72,3 +82,5 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+@Html.Action("ListAllContacts", Model.Id)

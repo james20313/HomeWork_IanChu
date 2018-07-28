@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CustomerManagementSystem.ViewModels;
+using System.Data.Entity;
 
 namespace CustomerManagementSystem.Models
 {   
@@ -38,9 +39,14 @@ namespace CustomerManagementSystem.Models
             return query;
         }
 
-        public List<CustometContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging)
+        public List<CustomerContactViewModel> Search(CustomerContactQueryCondition cond,PagingViewModel paging,SortingViewModel sort)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Skip(paging.Skip).Take(paging.Take).Select(x=>new CustometContactViewModel() {
+            return this.GetSearchIQuerable(cond)
+                .Sort(sort)
+                .Skip(paging.Skip)
+                .Take(paging.Take)
+                .AsNoTracking()
+                .Select(x=>new CustomerContactViewModel() {
                 CompanyNumber=x.客戶資料.統一編號,
                 CustomerName=x.客戶資料.客戶名稱,
                 Email=x.Email,
@@ -52,9 +58,9 @@ namespace CustomerManagementSystem.Models
             }).ToList();
         }
 
-        public List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond)
+        public List<CustomerContactViewModel> SearchAll(CustomerContactQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).Select(x => new CustometContactViewModel()
+            return this.GetSearchIQuerable(cond).OrderByDescending(x => x.Id).AsNoTracking().Select(x => new CustomerContactViewModel()
             {
                 CompanyNumber = x.客戶資料.統一編號,
                 CustomerName = x.客戶資料.客戶名稱,
@@ -69,12 +75,45 @@ namespace CustomerManagementSystem.Models
 
         public int SearchCount(CustomerContactQueryCondition cond)
         {
-            return this.GetSearchIQuerable(cond).Count();
+            return this.GetSearchIQuerable(cond).AsNoTracking().Count();
         }
 
         public bool IsEmailExist(string email,int customerId)
         {
             return this.All().Any(x => x.客戶Id == customerId && x.Email.Equals(email));
+        }
+
+        /// <summary> 取得客戶底下所有聯絡人 </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<CustomerContactViewModel> GetListByCustomerId(int id)
+        {
+            return this.All().Where(x => x.客戶Id == id).Select(x => new CustomerContactViewModel
+            {
+                CompanyNumber=x.客戶資料.統一編號,
+                CustomerName=x.客戶資料.客戶名稱,
+                Id=x.Id,
+                Email=x.Email,
+                姓名=x.姓名,
+                手機=x.手機,
+                職稱=x.職稱,
+                電話 =x.電話
+            }).ToList();
+        }
+
+        public void BatchUpdate(List<CustomerContactViewModel> list)
+        {
+            foreach (var item in list)
+            {
+                var existData = this.GetContactById(item.Id);
+                if (existData == null)
+                {
+                    throw new Exception("找不到此客戶");
+                }
+                existData.職稱 = item.職稱;
+                existData.手機 = item.手機;
+                existData.電話 = item.電話;
+            }
         }
     }
 
@@ -82,9 +121,11 @@ namespace CustomerManagementSystem.Models
 	{
         客戶聯絡人 GetContactById(int id);
         IQueryable<客戶聯絡人> GetSearchIQuerable(CustomerContactQueryCondition cond);
-        List<CustometContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging);
-        List<CustometContactViewModel> SearchAll(CustomerContactQueryCondition cond);
+        List<CustomerContactViewModel> Search(CustomerContactQueryCondition cond, PagingViewModel paging, SortingViewModel sort);
+        List<CustomerContactViewModel> SearchAll(CustomerContactQueryCondition cond);
         int SearchCount(CustomerContactQueryCondition cond);
         bool IsEmailExist(string email, int customerId);
+        List<CustomerContactViewModel> GetListByCustomerId(int id);
+        void BatchUpdate(List<CustomerContactViewModel> list);
     }
 }

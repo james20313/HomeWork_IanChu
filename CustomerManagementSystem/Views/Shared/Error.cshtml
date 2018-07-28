@@ -4,6 +4,8 @@
     ViewBag.Title = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h1>Oops!</h1>
+<h2>發生錯誤了!</h2>
+<h2>@Model.Exception.Message</h2>
+<pre>@Model.Exception.ToString()</pre>
 
