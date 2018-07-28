@@ -251,6 +251,8 @@
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Services\AuthorizationService.cs" />
+    <Compile Include="Models\Services\LoginService.cs" />
     <Compile Include="Models\客戶聯絡人.Partial.cs">
       <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
@@ -273,6 +275,7 @@
     <Compile Include="ViewModels\CustomerContactsQueryViewModel.cs" />
     <Compile Include="ViewModels\CustomerDetailViewModel.cs" />
     <Compile Include="ViewModels\CustomerEditViewModel.cs" />
+    <Compile Include="ViewModels\CustomerOnlyEditViewModel.cs" />
     <Compile Include="ViewModels\CustomerReportViewModel.cs" />
     <Compile Include="ViewModels\CustomersQueryViewModel.cs" />
     <Compile Include="Models\客戶聯絡人.cs">
@@ -316,6 +319,7 @@
     <Compile Include="ViewModels\CustomerQueryInModel.cs" />
     <Compile Include="ViewModels\CustomersViewModel.cs" />
     <Compile Include="ViewModels\CustometContactViewModel.cs" />
+    <Compile Include="ViewModels\CustomerLoginViewModel.cs" />
     <Compile Include="ViewModels\PagingViewModel.cs" />
     <Compile Include="ViewModels\SortingViewModel.cs" />
   </ItemGroup>
@@ -432,6 +436,8 @@
     <Content Include="Views\Shared\DisplayTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\EmailAddress.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GoogleMapLinkAddress.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Customers\CustomerEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

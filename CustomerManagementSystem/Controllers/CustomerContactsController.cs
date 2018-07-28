@@ -15,6 +15,7 @@ using CustomerManagementSystem.Models.Exceptions;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [Authorize(Roles ="Manager")]
     public class CustomerContactsController : Controller
     {
         private I客戶聯絡人Repository ContactsRepo;

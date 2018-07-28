@@ -57,35 +57,50 @@
                             <div class="col col s8 m8 l8">
                                 <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown-nav">John Doe<i class="mdi-navigation-arrow-drop-down right"></i></a>
                                 <p class="user-roal">Administrator</p>
+                                <a href="@Url.Action("LogOut","Home")" class="white-text text-darken-1">
+                                    <i class="material-icons">keyboard_tab</i> Logout
+                                </a>
                             </div>
                         </div>
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible" data-collapsible="accordion">
-                            <li class="bold">
-                                <a href="@Url.Action("Index","Customers")" class="waves-effect waves-cyan">
-                                    <i class="material-icons">people</i>
-                                    <span class="nav-text">客戶資料管理</span>
-                                </a>
-                            </li>
-                            <li class="bold">
-                                <a href="@Url.Action("Index","CustomerContacts")" class="waves-effect waves-cyan">
-                                    <i class="material-icons">contact_mail</i>
-                                    <span class="nav-text">客戶聯絡人管理</span>
-                                </a>
-                            </li>
-                            <li class="bold">
-                                <a href="@Url.Action("Index","BankAccounts")" class="waves-effect waves-cyan">
-                                    <i class="material-icons">account_balance</i>
-                                    <span class="nav-text">客戶銀行帳戶管理</span>
-                                </a>
-                            </li>
-                            <li class="bold">
-                                <a href="@Url.Action("Index","CustomerReport")" class="waves-effect waves-cyan">
-                                    <i class="material-icons">insert_chart</i>
-                                    <span class="nav-text">客戶報表</span>
-                                </a>
-                            </li>
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","Customers")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">people</i>
+                                        <span class="nav-text">客戶資料管理</span>
+                                    </a>
+                                </li>
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","CustomerContacts")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">contact_mail</i>
+                                        <span class="nav-text">客戶聯絡人管理</span>
+                                    </a>
+                                </li>
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","BankAccounts")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">account_balance</i>
+                                        <span class="nav-text">客戶銀行帳戶管理</span>
+                                    </a>
+                                </li>
+                                <li class="bold">
+                                    <a href="@Url.Action("Index","CustomerReport")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">insert_chart</i>
+                                        <span class="nav-text">客戶報表</span>
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Customer"))
+                            {
+                                <li class="bold">
+                                    <a href="@Url.Action("CustomerEdit","Customer")" class="waves-effect waves-cyan">
+                                        <i class="material-icons">people</i>
+                                        <span class="nav-text">修改客戶資料</span>
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </li>
                 </ul>

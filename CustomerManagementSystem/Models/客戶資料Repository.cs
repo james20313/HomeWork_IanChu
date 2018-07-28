@@ -92,6 +92,32 @@ namespace CustomerManagementSystem.Models
         {
             return this.All().Count();
         }
+
+        public void Update(客戶資料 data)
+        {
+            var existData = this.GetCustomerById(data.Id);
+            existData.Email = data.Email;
+            existData.Account = data.Account;
+            existData.傳真 = data.傳真;
+            existData.地址 = data.地址;
+            existData.客戶名稱 = data.客戶名稱;
+            existData.統一編號 = data.統一編號;
+            existData.電話 = data.電話;
+            existData.類別Id = data.類別Id;
+        }
+
+        public void UpdateCustomerOnlyData(CustomerOnlyEditViewModel vm)
+        {
+            var existData = this.All().Where(x=>x.Id==vm.Id).FirstOrDefault();
+            if (existData == null)
+            {
+                throw new Exception("找不到此客戶");
+            }
+            existData.電話 = vm.電話;
+            existData.傳真 = vm.傳真;
+            existData.地址 = vm.地址;
+            existData.Email = vm.Email;
+        }
     }
 
     public interface I客戶資料Repository : IRepository<客戶資料>
@@ -103,5 +129,6 @@ namespace CustomerManagementSystem.Models
         int SearchCount(CustomerQueryInModel cond);
         List<CustomerReportViewModel> GetReport();
         int GetCustomerAmount();
+        void UpdateCustomerOnlyData(CustomerOnlyEditViewModel vm);
     }
 }
