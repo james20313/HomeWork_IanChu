@@ -35,7 +35,10 @@
 </head>
 <body>
     <div class="container">
-        
+        @if(ViewBag.LogOutMsg!=null && !string.IsNullOrEmpty(ViewBag.LogOutMsg))
+        {
+            <h2>@ViewBag.LogOutMsg</h2>
+        }
         @using (Html.BeginForm("Login", "Home", new { ReturnUrl = Request.QueryString["ReturnUrl"] }, FormMethod.Post, new { name = "login" }))
         {
             @Html.DisplayNameFor(model => model.Account)
