@@ -40,6 +40,7 @@ namespace CustomerManagementSystem.Controllers
 
         public ActionResult Login()
         {
+            ViewBag.LogOutMsg = TempData["LogOutMsg"];
             return View();
         }
 
@@ -107,6 +108,7 @@ namespace CustomerManagementSystem.Controllers
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
+            TempData["LogOutMsg"] = "已成功登出";
             return RedirectToAction("Login", "Home");
         }
     }
