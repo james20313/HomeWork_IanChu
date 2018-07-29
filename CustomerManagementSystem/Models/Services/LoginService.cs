@@ -29,7 +29,7 @@ namespace CustomerManagementSystem.Models.Services
             }
 
             var result = false;
-            var existAcc = this.CustomerRepo.All().FirstOrDefault(x => x.Account.Equals(userInput));
+            var existAcc = this.CustomerRepo.All().FirstOrDefault(x => x.Account.Equals(userInput.Account));
             if (existAcc == null)
                 result = false;
             else
